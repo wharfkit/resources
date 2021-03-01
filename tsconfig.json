@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "downlevelIteration": true,
+        "esModuleInterop": true,
+        "experimentalDecorators": true,
+        "importHelpers": true,
+        "isolatedModules": true,
+        "lib": ["esnext"],
+        "module": "esnext",
+        "moduleResolution": "node",
+        "noImplicitAny": false,
+        "sourceMap": true,
+        "strict": true,
+        "target": "esnext"
+    },
+    "include": ["src/**/*"]
+}
