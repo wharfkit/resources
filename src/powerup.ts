@@ -6,7 +6,7 @@ import {PowerUpState} from './abi-types'
 export class PowerUpAPI {
     constructor(private parent: Resources) {}
 
-    async get_state() {
+    async get_state(): Promise<PowerUpState> {
         const response = await this.parent.api.v1.chain.get_table_rows({
             code: 'eosio',
             scope: '',
@@ -16,19 +16,19 @@ export class PowerUpAPI {
         return response.rows[0]
     }
 
-    async get_reserved(state: PowerUpState, resource: string) {
+    get_reserved(state: PowerUpState, resource: string): number {
         const {utilization, weight} = state[resource]
         return Number(utilization) / Number(weight)
     }
 
-    async get_allocated(state: PowerUpState) {
+    get_allocated(state: PowerUpState): number {
         const {weight_ratio} = state.cpu
         return 1 - Number(weight_ratio) / this.parent.rex_target_weight / 100
     }
 
-    async get_price_per_ms(state: PowerUpState, ms = 1): Promise<Asset> {
+    get_price_per_ms(state: PowerUpState, ms = 1): Asset {
         // Retrieve state
-        const allocated = await this.get_allocated(state)
+        const allocated = this.get_allocated(state)
 
         // Casting EOSIO types to usable formats for JS calculations
         let adjusted_utilization = Number(state.cpu.adjusted_utilization)

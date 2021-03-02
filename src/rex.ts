@@ -1,6 +1,6 @@
 import {Asset} from '@greymass/eosio'
 
-import {Resources} from './'
+import {Resources, SampleUsage} from './'
 import {REXState} from './abi-types'
 
 export class REXAPI {
@@ -16,17 +16,14 @@ export class REXAPI {
         return response.rows[0]
     }
 
-    async get_reserved(state: REXState) {
+    get_reserved(state: REXState) {
         const {total_lent, total_lendable} = state
         return Number(total_lent.units) / Number(total_lendable.units)
     }
 
-    async get_price_per_ms(state: REXState, ms = 1): Promise<Asset> {
+    get_price_per_ms(state: REXState, usage: SampleUsage, ms = 1): Asset {
         // REX Values
         const {total_rent, total_unlent} = state
-
-        // Sample CPU usage
-        const {cpu} = await this.parent.getSampledUsage()
 
         // Sample token units
         const tokens = Asset.fromUnits(10000, this.parent.symbol)
@@ -35,7 +32,7 @@ export class REXAPI {
         const bancor = Number(tokens.units) / (total_rent.value / total_unlent.value)
 
         // The ratio of the number of tokens received vs the sampled cpu values
-        const microseconds = bancor * cpu
+        const microseconds = bancor * usage.cpu
 
         // The token units spent per microsecond
         const permicrosecond = Number(tokens.units) / microseconds

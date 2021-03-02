@@ -9,7 +9,7 @@ interface ResourcesOptions {
     url?: string
 }
 
-interface SampleUsage {
+export interface SampleUsage {
     cpu: number
     net: number
 }
