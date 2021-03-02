@@ -20,7 +20,7 @@
         "prepare": "make"
     },
     "dependencies": {
-        "@greymass/eosio": "^0.3.0",
+        "@greymass/eosio": "^0.3.2",
         "tslib": "^2.1.0"
     },
     "devDependencies": {
