@@ -16,22 +16,19 @@ export class PowerUpAPI {
         return response.rows[0]
     }
 
-    async get_reserved(resource: string) {
-        const state = await this.get_state()
+    async get_reserved(state: PowerUpState, resource: string) {
         const {utilization, weight} = state[resource]
         return Number(utilization) / Number(weight)
     }
 
-    async get_allocated() {
-        const state = await this.get_state()
+    async get_allocated(state: PowerUpState) {
         const {weight_ratio} = state.cpu
         return 1 - Number(weight_ratio) / this.parent.rex_target_weight / 100
     }
 
-    async get_price_per_ms(ms = 1): Promise<Asset> {
+    async get_price_per_ms(state: PowerUpState, ms = 1): Promise<Asset> {
         // Retrieve state
-        const state = await this.get_state()
-        const allocated = await this.get_allocated()
+        const allocated = await this.get_allocated(state)
 
         // Casting EOSIO types to usable formats for JS calculations
         let adjusted_utilization = Number(state.cpu.adjusted_utilization)

@@ -16,21 +16,16 @@ export class REXAPI {
         return response.rows[0]
     }
 
-    async get_reserved() {
-        const state = await this.get_state()
+    async get_reserved(state: REXState) {
         const {total_lent, total_lendable} = state
         return Number(total_lent.units) / Number(total_lendable.units)
     }
 
-    async get_allocated() {
-        const state = await this.parent.v1.powerup.get_state()
-        const {weight_ratio} = state.cpu
-        return Number(weight_ratio) / this.parent.rex_target_weight / 100
-    }
+    async get_price_per_ms(state: REXState, ms = 1): Promise<Asset> {
+        // REX Values
+        const {total_rent, total_unlent} = state
 
-    async get_price_per_ms(ms = 1): Promise<Asset> {
-        const allocated = await this.get_allocated()
-        const state = await this.get_state()
+        // Sample CPU usage
         const {cpu} = await this.parent.getSampledUsage()
 
         const totalRent = state.total_rent
