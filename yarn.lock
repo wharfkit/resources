@@ -200,9 +200,9 @@
     strip-json-comments "^3.1.1"
 
 "@greymass/eosio@^0.3.0":
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/@greymass/eosio/-/eosio-0.3.0.tgz#41c3ad37989dff865b789c35f4b82810998d00d6"
-  integrity sha512-4MUATWM13Bk+iTHBOA1YX07NO6cwtBE8IYVO0Q5ofR8zgPVIy7slbAzKhBRAY+yGPGHfH/LBq0jIhk/93yuESQ==
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/@greymass/eosio/-/eosio-0.3.1.tgz#b747d453e0bb726d6e82c4e39b1f9c5ea24f4a2c"
+  integrity sha512-MISm0Ytt3l9rtv4kSpKyxUTR1ow7WnglY7K8Ip0jMjv0n38yl0IGowFiS3qkhnGKwhKzU52pK6WHNuRW16lasg==
   dependencies:
     bn.js "^4.11.9"
     brorand "^1.1.0"
