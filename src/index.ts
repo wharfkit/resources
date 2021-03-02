@@ -48,8 +48,8 @@ export class Resources {
     async getSampledUsage(): Promise<SampleUsage> {
         const account = await this.api.v1.chain.get_account(this.sampleAccount)
         return {
-            cpu: account.cpu_limit.max.value / account.cpu_weight.value,
-            net: account.net_limit.max.value / account.net_weight.value,
+            cpu: Number(account.cpu_limit.max.value) / Number(account.cpu_weight.value),
+            net: Number(account.net_limit.max.value) / Number(account.net_weight.value),
         }
     }
 }
