@@ -26,6 +26,16 @@ export class PowerUpAPI {
         return 1 - Number(weight_ratio) / this.parent.rex_target_weight / 100
     }
 
+    get_cpu_frac(state: PowerUpState, tokens: Asset) {
+        const price = this.get_price_per_ms(state, 1)
+        const allocated = this.get_allocated(state)
+        const mspdAvailable = this.parent.mspd * allocated
+        const percentToRent = tokens.value / price.value / mspdAvailable
+        const weight = Number(state.cpu.weight)
+        const utilization_increase = weight * percentToRent
+        return Math.floor(utilization_increase)
+    }
+
     get_price_per_ms(state: PowerUpState, ms = 1): Asset {
         // Retrieve state
         const allocated = this.get_allocated(state)

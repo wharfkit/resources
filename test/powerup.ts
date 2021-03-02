@@ -2,7 +2,7 @@ import 'mocha'
 import {strict as assert} from 'assert'
 import {join as joinPath} from 'path'
 
-import {APIClient, Name} from '@greymass/eosio'
+import {APIClient, Asset, Name} from '@greymass/eosio'
 import {MockProvider} from './utils/mock-provider'
 
 import {Resources} from '../src'
@@ -51,5 +51,15 @@ suite('powerup', function () {
         assert.equal(String(price), '0.5702 EOS')
         assert.equal(price.value, 0.5702)
         assert.equal(Number(price.units), 5702)
+    })
+    test('v1.powerup.get_cpu_frac(1)', async function () {
+        const state = await resources.v1.powerup.get_state()
+        const frac = resources.v1.powerup.get_cpu_frac(state, Asset.from(1, '4,EOS'))
+        assert.equal(frac, 213562146)
+    })
+    test('v1.powerup.get_cpu_frac(100)', async function () {
+        const state = await resources.v1.powerup.get_state()
+        const frac = resources.v1.powerup.get_cpu_frac(state, Asset.from(100, '4,EOS'))
+        assert.equal(frac, 21356214675)
     })
 })
