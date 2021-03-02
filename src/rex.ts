@@ -28,10 +28,25 @@ export class REXAPI {
         // Sample CPU usage
         const {cpu} = await this.parent.getSampledUsage()
 
-        const totalRent = state.total_rent
-        const totalUnlent = state.total_unlent
-        const tokens = 1
-        const msPerToken = (tokens / (totalRent.value / totalUnlent.value)) * cpu * allocated
-        return Asset.from((tokens / msPerToken) * ms, this.parent.symbol)
+        // Sample token units
+        const tokens = Asset.fromUnits(10000, this.parent.symbol)
+
+        // Spending 1 EOS (10000 units) on REX gives this many tokens
+        const bancor = Number(tokens.units) / (total_rent.value / total_unlent.value)
+
+        // The ratio of the number of tokens received vs the sampled cpu values
+        const microseconds = bancor * cpu
+
+        // The token units spent per microsecond
+        const permicrosecond = Number(tokens.units) / microseconds
+
+        // Converting to milliseconds
+        const permillisecond = permicrosecond * 1000
+
+        // Multiply the per millisecond cost by the ms requested
+        const cost = permillisecond * ms
+
+        // Converting to an Asset
+        return Asset.fromUnits(cost, this.parent.symbol)
     }
 }
