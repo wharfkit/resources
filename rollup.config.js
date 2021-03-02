@@ -39,7 +39,7 @@ export default [
             format: 'esm',
             sourcemap: true,
         },
-        plugins: [typescript({target: 'esnext'})],
+        plugins: [typescript({target: 'es2020'})],
         external,
         onwarn,
     },
