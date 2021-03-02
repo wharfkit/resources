@@ -2,12 +2,12 @@
 
 ## Installation
 
-The `eosio-resources` package is distributed as a module on [npm](https://www.npmjs.com/package/eosio-resources).
+The `@greymass/eosio-resources` package is distributed as a module on [npm](https://www.npmjs.com/package/eosio-resources).
 
 ```
-yarn add eosio-resources
+yarn add @greymass/eosio-resources
 # or
-npm install --save eosio-resources
+npm install --save @greymass/eosio-resources
 ```
 
 ## Usage
