@@ -1,0 +1,97 @@
+{
+    "account_name": "b1",
+    "head_block_num": 170971192,
+    "head_block_time": "2021-03-01T22:45:10.500",
+    "privileged": false,
+    "last_code_update": "1970-01-01T00:00:00.000",
+    "created": "2018-06-09T11:58:03.500",
+    "core_liquid_balance": "1999999.6971 EOS",
+    "ram_quota": "34307705487",
+    "net_weight": "398984152946",
+    "cpu_weight": "345999985055",
+    "net_limit": {
+        "used": 241,
+        "available": "45422956249146",
+        "max": "45422956249387"
+    },
+    "cpu_limit": {
+        "used": 1616,
+        "available": 3028719260,
+        "max": 3028720876
+    },
+    "ram_usage": 4686,
+    "permissions": [
+        {
+            "perm_name": "active",
+            "parent": "owner",
+            "required_auth": {
+                "threshold": 2,
+                "keys": [
+                    {
+                        "key": "EOS6hQ6v8vut1V2giQCYha7J225GCzFJtF3o7fy8JYuN7k6fG4n23",
+                        "weight": 1
+                    },
+                    {
+                        "key": "EOS7RodmQofvAxgYBJzfNuwRKr6TWh5LbCBfB4uQ8tjrjQ8Ukkwqq",
+                        "weight": 1
+                    },
+                    {
+                        "key": "EOS8RFgis6KAbChv89L3ibPmSH9raqN3iaFWbyLrDgmAuV3rsZ9SM",
+                        "weight": 1
+                    }
+                ],
+                "accounts": [],
+                "waits": []
+            }
+        },
+        {
+            "perm_name": "owner",
+            "parent": "",
+            "required_auth": {
+                "threshold": 2,
+                "keys": [
+                    {
+                        "key": "EOS6hQ6v8vut1V2giQCYha7J225GCzFJtF3o7fy8JYuN7k6fG4n23",
+                        "weight": 1
+                    },
+                    {
+                        "key": "EOS7RodmQofvAxgYBJzfNuwRKr6TWh5LbCBfB4uQ8tjrjQ8Ukkwqq",
+                        "weight": 1
+                    },
+                    {
+                        "key": "EOS8RFgis6KAbChv89L3ibPmSH9raqN3iaFWbyLrDgmAuV3rsZ9SM",
+                        "weight": 1
+                    }
+                ],
+                "accounts": [],
+                "waits": []
+            }
+        }
+    ],
+    "total_resources": {
+        "owner": "b1",
+        "net_weight": "39898415.2946 EOS",
+        "cpu_weight": "34599998.5055 EOS",
+        "ram_bytes": "34307704087"
+    },
+    "self_delegated_bandwidth": {
+        "from": "b1",
+        "to": "b1",
+        "net_weight": "39898414.2946 EOS",
+        "cpu_weight": "34599997.5055 EOS"
+    },
+    "refund_request": null,
+    "voter_info": {
+        "owner": "b1",
+        "proxy": "sub2.b1",
+        "producers": [],
+        "staked": "745004118001",
+        "last_vote_weight": "1692477144167858944.00000000000000000",
+        "proxied_vote_weight": "0.00000000000000000",
+        "is_proxy": 0,
+        "flags1": 0,
+        "reserved2": 0,
+        "reserved3": "0.0000 EOS"
+    },
+    "rex_info": null
+}

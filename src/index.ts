@@ -25,6 +25,8 @@ export class Resources {
     // ms per day
     mspd = 200 * 2 * 60 * 60 * 24
 
+    sampleAccount = 'b1'
+
     // token precision/symbol
     symbol = '4,EOS'
 
@@ -44,7 +46,7 @@ export class Resources {
     }
 
     async getSampledUsage(): Promise<SampleUsage> {
-        const account = await this.api.v1.chain.get_account('teamgreymass')
+        const account = await this.api.v1.chain.get_account(this.sampleAccount)
         return {
             cpu: account.cpu_limit.max.value / account.total_resources.cpu_weight.value / 1000,
             net: account.net_limit.max.value / account.total_resources.net_weight.value / 1000,
