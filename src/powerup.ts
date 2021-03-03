@@ -1,7 +1,187 @@
-import {Asset} from '@greymass/eosio'
-
+import {
+    Asset,
+    AssetType,
+    Float64,
+    Int64,
+    Struct,
+    TimePointSec,
+    UInt32,
+    UInt64,
+    UInt8,
+} from '@greymass/eosio'
 import {Resources} from '.'
-import {PowerUpState} from './abi-types'
+
+@Struct.type('powerupstateresource')
+export class PowerUpStateResource extends Struct {
+    @Struct.field('uint8') version!: UInt8
+    @Struct.field('int64') weight!: Int64
+    @Struct.field('int64') weight_ratio!: Int64
+    @Struct.field('int64') assumed_stake_weight!: Int64
+    @Struct.field('int64') initial_weight_ratio!: Int64
+    @Struct.field('int64') target_weight_ratio!: Int64
+    @Struct.field('time_point_sec') initial_timestamp!: TimePointSec
+    @Struct.field('time_point_sec') target_timestamp!: TimePointSec
+    @Struct.field('float64') exponent!: Float64
+    @Struct.field('uint32') decay_secs!: UInt32
+    @Struct.field('asset') min_price!: Asset
+    @Struct.field('asset') max_price!: Asset
+    @Struct.field('int64') utilization!: Int64
+    @Struct.field('int64') adjusted_utilization!: Int64
+    @Struct.field('time_point_sec') utilization_timestamp!: TimePointSec
+
+    // TODO: Get these loaded from a get_info call
+    public virtual_block_cpu_limit: UInt64 = UInt64.from(200000)
+    public virtual_block_net_limit: UInt64 = UInt64.from(1048576000)
+
+    public get us_per_day() {
+        return Number(this.virtual_block_cpu_limit) * 2 * 60 * 60 * 24
+    }
+
+    public get ms_per_day() {
+        return (Number(this.virtual_block_cpu_limit) / 1000) * 2 * 60 * 60 * 24
+    }
+
+    public get allocated() {
+        return 1 - Number(this.weight_ratio) / Number(this.target_weight_ratio) / 100
+    }
+
+    public get reserved() {
+        return Number(this.utilization) / Number(this.weight)
+    }
+
+    public get symbol() {
+        return this.min_price.symbol
+    }
+
+    frac(value: AssetType) {
+        const asset = Asset.from(value)
+        const price = this.price_per_ms(1)
+        const allocated = this.allocated
+        const us_available = Math.floor((this.us_per_day / 1000) * allocated)
+        const us_to_rent = Math.floor(asset.value / price.value)
+        const frac = (us_to_rent / us_available) * Math.pow(10, 15)
+        return Math.floor(frac)
+    }
+
+    cast() {
+        return {
+            adjusted_utilization: Number(this.adjusted_utilization),
+            decay_secs: Number(this.decay_secs.value),
+            exponent: Number(this.exponent),
+            max_price: this.max_price.value,
+            min_price: this.min_price.value,
+            utilization: Number(this.utilization),
+            utilization_timestamp: Number(this.utilization_timestamp.value),
+            weight: Number(this.weight),
+        }
+    }
+
+    utilization_increase(amount) {
+        // Resources allocated to PowerUp
+        const allocated = this.allocated
+        const {weight} = this.cast()
+
+        // Microseconds available per day available in PowerUp (factoring in shift)
+        const us_available = this.us_per_day * allocated
+
+        // Percentage to rent
+        const percentToRent = amount / us_available
+        return weight * percentToRent
+    }
+
+    price_function(utilization: number): number {
+        const {exponent, weight} = this.cast()
+        const max_price: number = this.max_price.value
+        const min_price: number = this.min_price.value
+        let price = min_price
+        const new_exponent = exponent - 1.0
+        if (new_exponent <= 0.0) {
+            return max_price
+        } else {
+            price += (max_price - min_price) * Math.pow(utilization / weight, new_exponent)
+        }
+        return price
+    }
+
+    price_integral_delta(start_utilization: number, end_utilization: number): number {
+        const {exponent, weight} = this.cast()
+        const max_price: number = this.max_price.value
+        const min_price: number = this.min_price.value
+        const coefficient = (max_price - min_price) / exponent
+        const start_u = start_utilization / weight
+        const end_u = end_utilization / weight
+        return (
+            min_price * end_u -
+            min_price * start_u +
+            coefficient * Math.pow(end_u, exponent) -
+            coefficient * Math.pow(start_u, exponent)
+        )
+    }
+
+    fee(utilization_increase, adjusted_utilization) {
+        const {utilization, weight} = this.cast()
+        let start_utilization: number = utilization
+        const end_utilization: number = start_utilization + utilization_increase
+        let fee = 0
+        if (start_utilization < adjusted_utilization) {
+            fee +=
+                (this.price_function(adjusted_utilization) *
+                    Math.min(utilization_increase, adjusted_utilization - start_utilization)) /
+                weight
+            start_utilization = adjusted_utilization
+        }
+
+        if (start_utilization < end_utilization) {
+            fee += this.price_integral_delta(start_utilization, end_utilization)
+        }
+        return fee
+    }
+
+    determine_adjusted_utilization() {
+        // Casting EOSIO types to usable formats for JS calculations
+        const {decay_secs, utilization, utilization_timestamp} = this.cast()
+        let {adjusted_utilization} = this.cast()
+        // If utilization is less than adjusted, calculate real time value
+        if (utilization < adjusted_utilization) {
+            // Create now & adjust JS timestamp to match EOSIO timestamp values
+            const now: number = Math.floor(Date.now() / 1000)
+            const diff: number = adjusted_utilization - utilization
+            let delta: number = Math.floor(
+                diff * Math.exp(-(now - utilization_timestamp) / decay_secs)
+            )
+            delta = Math.min(Math.max(delta, 0), diff) // Clamp the delta
+            adjusted_utilization = utilization + delta
+        }
+        return adjusted_utilization
+    }
+
+    price_per_ms(ms = 1): Asset {
+        return this.price_per_us(ms * 1000)
+    }
+
+    price_per_us(us = 1000): Asset {
+        // Determine the utilization increase by this action
+        const utilization_increase = this.utilization_increase(us)
+
+        // Determine the adjusted utilization if needed
+        const adjusted_utilization = this.determine_adjusted_utilization()
+
+        // Derive the fee from the increase and utilization
+        const fee = this.fee(utilization_increase, adjusted_utilization)
+
+        // Return the asset version of the fee
+        return Asset.fromUnits(Math.ceil(fee * 10000), this.symbol)
+    }
+}
+
+@Struct.type('powerupstate')
+export class PowerUpState extends Struct {
+    @Struct.field('uint8') version!: UInt8
+    @Struct.field(PowerUpStateResource) net!: PowerUpStateResource
+    @Struct.field(PowerUpStateResource) cpu!: PowerUpStateResource
+    @Struct.field('uint32') powerup_days!: UInt32
+    @Struct.field('asset') min_powerup_fee!: Asset
+}
 
 export class PowerUpAPI {
     constructor(private parent: Resources) {}
@@ -14,101 +194,5 @@ export class PowerUpAPI {
             type: PowerUpState,
         })
         return response.rows[0]
-    }
-
-    get_reserved(state: PowerUpState, resource: string): number {
-        const {utilization, weight} = state[resource]
-        return Number(utilization) / Number(weight)
-    }
-
-    get_allocated(state: PowerUpState): number {
-        const {weight_ratio} = state.cpu
-        return 1 - Number(weight_ratio) / this.parent.rex_target_weight / 100
-    }
-
-    get_cpu_frac(state: PowerUpState, tokens: Asset) {
-        const price = this.get_price_per_ms(state, 1)
-        const allocated = this.get_allocated(state)
-        const mspdAvailable = this.parent.mspd * allocated
-        const msToRent = tokens.value / price.value
-        const cpu_frac = (msToRent / mspdAvailable) * Math.pow(10, 15)
-        return Math.floor(cpu_frac)
-    }
-
-    get_price_per_ms(state: PowerUpState, ms = 1): Asset {
-        // Retrieve state
-        const allocated = this.get_allocated(state)
-
-        // Casting EOSIO types to usable formats for JS calculations
-        let adjusted_utilization = Number(state.cpu.adjusted_utilization)
-        const decay_secs = Number(state.cpu.decay_secs.value)
-        const exponent = Number(state.cpu.exponent)
-        const max_price: number = state.cpu.max_price.value
-        const min_price: number = state.cpu.min_price.value
-        const utilization = Number(state.cpu.utilization)
-        const utilization_timestamp = Number(state.cpu.utilization_timestamp.value)
-        const weight = Number(state.cpu.weight)
-
-        // Milliseconds available per day available in PowerUp (factoring in shift)
-        const mspdAvailable = this.parent.mspd * allocated
-
-        // Percentage to rent
-        const percentToRent = ms / mspdAvailable
-        const utilization_increase = weight * percentToRent
-
-        // If utilization is less than adjusted, calculate real time value
-        if (utilization < adjusted_utilization) {
-            // Create now & adjust JS timestamp to match EOSIO timestamp values
-            const now: number = Math.floor(Date.now() / 1000)
-            const diff: number = adjusted_utilization - utilization
-            let delta: number = Math.floor(
-                diff * Math.exp(-(now - utilization_timestamp) / decay_secs)
-            )
-            delta = Math.min(Math.max(delta, 0), diff) // Clamp the delta
-            adjusted_utilization = utilization + delta
-        }
-
-        const price_integral_delta = (
-            start_utilization: number,
-            end_utilization: number
-        ): number => {
-            const coefficient = (max_price - min_price) / exponent
-            const start_u = start_utilization / weight
-            const end_u = end_utilization / weight
-            return (
-                min_price * end_u -
-                min_price * start_u +
-                coefficient * Math.pow(end_u, exponent) -
-                coefficient * Math.pow(start_u, exponent)
-            )
-        }
-
-        const price_function = (utilization: number): number => {
-            let price = min_price
-            const new_exponent = exponent - 1.0
-            if (new_exponent <= 0.0) {
-                return max_price
-            } else {
-                price += (max_price - min_price) * Math.pow(utilization / weight, new_exponent)
-            }
-            return price
-        }
-
-        let fee = 0
-        let start_utilization: number = utilization
-        const end_utilization: number = start_utilization + utilization_increase
-
-        if (start_utilization < adjusted_utilization) {
-            fee +=
-                (price_function(adjusted_utilization) *
-                    Math.min(utilization_increase, adjusted_utilization - start_utilization)) /
-                weight
-            start_utilization = adjusted_utilization
-        }
-
-        if (start_utilization < end_utilization) {
-            fee += price_integral_delta(start_utilization, end_utilization)
-        }
-        return Asset.fromUnits(Math.ceil(fee * 10000), this.parent.symbol)
     }
 }

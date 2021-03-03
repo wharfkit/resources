@@ -1,0 +1,45 @@
+{
+    "rows": [
+        {
+            "version": 0,
+            "net": {
+                "version": 0,
+                "weight": "187583789251",
+                "weight_ratio": "837133753524107",
+                "assumed_stake_weight": "964182112590",
+                "initial_weight_ratio": "1000000000000000",
+                "target_weight_ratio": "10000000000000",
+                "initial_timestamp": "2021-02-24T03:31:31",
+                "target_timestamp": "2021-04-08T08:08:08",
+                "exponent": "2.00000000000000000",
+                "decay_secs": 86400,
+                "min_price": "2500.0000 EOS",
+                "max_price": "75000.0000 EOS",
+                "utilization": 5649715,
+                "adjusted_utilization": 5649715,
+                "utilization_timestamp": "2021-03-03T06:03:34"
+            },
+            "cpu": {
+                "version": 0,
+                "weight": "750335157007",
+                "weight_ratio": "837133753524107",
+                "assumed_stake_weight": "3856728450360",
+                "initial_weight_ratio": "1000000000000000",
+                "target_weight_ratio": "10000000000000",
+                "initial_timestamp": "2021-02-24T03:31:31",
+                "target_timestamp": "2021-04-08T08:08:08",
+                "exponent": "2.00000000000000000",
+                "decay_secs": 86400,
+                "min_price": "2500.0000 EOS",
+                "max_price": "75000.0000 EOS",
+                "utilization": 1572015106,
+                "adjusted_utilization": 1574625257,
+                "utilization_timestamp": "2021-03-03T06:03:34"
+            },
+            "powerup_days": 1,
+            "min_powerup_fee": "0.0001 EOS"
+        }
+    ],
+    "more": false,
+    "next_key": ""
+}

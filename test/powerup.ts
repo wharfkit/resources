@@ -2,11 +2,11 @@ import 'mocha'
 import {strict as assert} from 'assert'
 import {join as joinPath} from 'path'
 
-import {APIClient, Asset, Name} from '@greymass/eosio'
+import {APIClient, Asset} from '@greymass/eosio'
 import {MockProvider} from './utils/mock-provider'
 
 import {Resources} from '../src'
-import * as ABIs from '../src/abi-types'
+import {PowerUpState} from '../src/powerup'
 
 const eos = new APIClient({
     provider: new MockProvider(joinPath(__dirname, 'data'), 'https://eos.greymass.com'),
@@ -16,50 +16,65 @@ const resources = new Resources({api: eos})
 
 suite('powerup', function () {
     this.slow(200)
-    test('v1.powerup.get_state', async function () {
-        const state = await resources.v1.powerup.get_state()
-        assert.equal(state instanceof ABIs.PowerUpState, true)
+    test('powerup = v1.powerup.get_state', async function () {
+        const powerup = await resources.v1.powerup.get_state()
+        assert.equal(powerup instanceof PowerUpState, true)
     })
-    test('v1.powerup.get_allocated', async function () {
-        const state = await resources.v1.powerup.get_state()
-        const cpu = resources.v1.powerup.get_allocated(state)
+    test('powerup.cpu.allocated', async function () {
+        const powerup = await resources.v1.powerup.get_state()
+        assert.equal(powerup.cpu.allocated, 0.12909697392435804)
         // 12.7957297784418% represented as float
-        assert.equal(cpu, 0.12909697392435804)
     })
-    test('v1.powerup.get_reserved(cpu)', async function () {
-        const state = await resources.v1.powerup.get_state()
-        const cpu = resources.v1.powerup.get_reserved(state, 'cpu')
+    test('powerup.cpu.reserved', async function () {
+        const powerup = await resources.v1.powerup.get_state()
+        assert.equal(powerup.cpu.reserved, 0.0004933312426372583)
         // 0.04985526440273404% represented as float
-        assert.equal(cpu, 0.0004933312426372583)
     })
-    test('v1.powerup.get_reserved(net)', async function () {
-        const state = await resources.v1.powerup.get_state()
-        const net = resources.v1.powerup.get_reserved(state, 'net')
+    test('powerup.net.reserved', async function () {
+        const powerup = await resources.v1.powerup.get_state()
+        assert.equal(powerup.net.reserved, 0.000017099101893048595)
         // 0.0017273973739949453% represented as float
-        assert.equal(net, 0.000017099101893048595)
     })
-    test('v1.powerup.get_price_per_ms(1)', async function () {
-        const state = await resources.v1.powerup.get_state()
-        const price = resources.v1.powerup.get_price_per_ms(state)
+    test('powerup.cpu.price_per_ms(1)', async function () {
+        const powerup = await resources.v1.powerup.get_state()
+        const price = powerup.cpu.price_per_ms(1)
         assert.equal(String(price), '0.0006 EOS')
         assert.equal(price.value, 0.0006)
         assert.equal(Number(price.units), 6)
     })
-    test('v1.powerup.get_price_per_ms(1000)', async function () {
-        const state = await resources.v1.powerup.get_state()
-        const price = resources.v1.powerup.get_price_per_ms(state, 1000)
+    test('powerup.cpu.price_per_ms(1000)', async function () {
+        const powerup = await resources.v1.powerup.get_state()
+        const price = powerup.cpu.price_per_ms(1000)
         assert.equal(String(price), '0.5702 EOS')
         assert.equal(price.value, 0.5702)
         assert.equal(Number(price.units), 5702)
     })
-    test('v1.powerup.get_cpu_frac(1)', async function () {
-        const state = await resources.v1.powerup.get_state()
-        const frac = resources.v1.powerup.get_cpu_frac(state, Asset.from(1, '4,EOS'))
-        assert.equal(frac, 373558784346)
+    test('powerup.cpu.frac<Asset>()', async function () {
+        const powerup = await resources.v1.powerup.get_state()
+        const frac1 = powerup.cpu.frac(Asset.from(1, '4,EOS'))
+        assert.equal(frac1, 373409395885)
+        const frac1000 = powerup.cpu.frac(Asset.from(1000, '4,EOS'))
+        assert.equal(frac1000, 373558669990144)
     })
-    test('v1.powerup.get_cpu_frac(1000)', async function () {
-        const state = await resources.v1.powerup.get_state()
-        const frac = resources.v1.powerup.get_cpu_frac(state, Asset.from(1000, '4,EOS'))
-        assert.equal(frac, 373558784346347)
+    test('powerup.cpu.frac<String>()', async function () {
+        const powerup = await resources.v1.powerup.get_state()
+        const frac1 = powerup.cpu.frac('1.0000 EOS')
+        assert.equal(frac1, 373409395885)
+        const frac1000 = powerup.cpu.frac('1000.0000 EOS')
+        assert.equal(frac1000, 373558669990144)
+    })
+    test('powerup.net.frac<Asset>()', async function () {
+        const powerup = await resources.v1.powerup.get_state()
+        const frac1 = powerup.net.frac(Asset.from(1, '4,EOS'))
+        assert.equal(frac1, 373409395885)
+        const frac1000 = powerup.net.frac(Asset.from(1000, '4,EOS'))
+        assert.equal(frac1000, 373558669990144)
+    })
+    test('powerup.net.frac<String>()', async function () {
+        const powerup = await resources.v1.powerup.get_state()
+        const frac1 = powerup.net.frac('1.0000 EOS')
+        assert.equal(frac1, 373409395885)
+        const frac1000 = powerup.net.frac('1000.0000 EOS')
+        assert.equal(frac1000, 373558669990144)
     })
 })
