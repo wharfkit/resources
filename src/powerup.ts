@@ -89,7 +89,7 @@ export class PowerUpStateResource extends Struct {
         return weight * percentToRent
     }
 
-    price_function(utilization: number): number {
+    private price_function(utilization: number): number {
         const {exponent, weight} = this.cast()
         const max_price: number = this.max_price.value
         const min_price: number = this.min_price.value
@@ -103,7 +103,7 @@ export class PowerUpStateResource extends Struct {
         return price
     }
 
-    price_integral_delta(start_utilization: number, end_utilization: number): number {
+    private price_integral_delta(start_utilization: number, end_utilization: number): number {
         const {exponent, weight} = this.cast()
         const max_price: number = this.max_price.value
         const min_price: number = this.min_price.value
@@ -118,7 +118,7 @@ export class PowerUpStateResource extends Struct {
         )
     }
 
-    fee(utilization_increase, adjusted_utilization) {
+    private fee(utilization_increase, adjusted_utilization) {
         const {utilization, weight} = this.cast()
         let start_utilization: number = utilization
         const end_utilization: number = start_utilization + utilization_increase

@@ -1,4 +1,4 @@
-import {APIClient} from '@greymass/eosio'
+import {API, APIClient} from '@greymass/eosio'
 
 import {PowerUpAPI} from './powerup'
 import {REXAPI} from './rex'
@@ -10,6 +10,7 @@ interface ResourcesOptions {
 }
 
 export interface SampleUsage {
+    account: API.v1.AccountObject
     cpu: number
     net: number
 }
@@ -48,6 +49,7 @@ export class Resources {
     async getSampledUsage(): Promise<SampleUsage> {
         const account = await this.api.v1.chain.get_account(this.sampleAccount)
         return {
+            account,
             cpu: Number(account.cpu_limit.max.value) / Number(account.cpu_weight.value),
             net: Number(account.net_limit.max.value) / Number(account.net_weight.value),
         }

@@ -6,7 +6,7 @@ import {APIClient, Name} from '@greymass/eosio'
 import {MockProvider} from './utils/mock-provider'
 
 import {Resources} from '../src'
-import * as ABIs from '../src/abi-types'
+import {REXState} from '../src/rex'
 
 const eos = new APIClient({
     provider: new MockProvider(joinPath(__dirname, 'data'), 'https://eos.greymass.com'),
@@ -17,35 +17,34 @@ const resources = new Resources({api: eos})
 suite('rex', function () {
     this.slow(200)
     test('v1.rex.get_state', async function () {
-        const state = await resources.v1.rex.get_state()
-        assert.equal(state instanceof ABIs.REXState, true)
+        const rex = await resources.v1.rex.get_state()
+        assert.equal(rex instanceof REXState, true)
     })
-    test('v1.rex.get_reserved', async function () {
-        const state = await resources.v1.rex.get_state()
-        const reserved = resources.v1.rex.get_reserved(state)
+    test('rex.reserved', async function () {
+        const rex = await resources.v1.rex.get_state()
+        assert.equal(rex.reserved, 0.5565968415413414)
         // 55.66151698897704% represented as float
-        assert.equal(reserved, 0.5565968415413414)
     })
-    test('v1.rex.get_price_per_ms(1)', async function () {
-        const state = await resources.v1.rex.get_state()
+    test('rex.price_per_ms(1)', async function () {
+        const rex = await resources.v1.rex.get_state()
         const usage = await resources.getSampledUsage()
-        const price = resources.v1.rex.get_price_per_ms(state, usage)
+        const price = rex.price_per_ms(usage)
         assert.equal(String(price), '0.0037 EOS')
         assert.equal(price.value, 0.0037)
         assert.equal(Number(price.units), 37)
     })
-    test('v1.rex.get_price_per_ms(10)', async function () {
-        const state = await resources.v1.rex.get_state()
+    test('rex.price_per_ms(10)', async function () {
+        const rex = await resources.v1.rex.get_state()
         const usage = await resources.getSampledUsage()
-        const price = resources.v1.rex.get_price_per_ms(state, usage, 10)
+        const price = rex.price_per_ms(usage, 10)
         assert.equal(String(price), '0.0370 EOS')
         assert.equal(price.value, 0.037)
         assert.equal(Number(price.units), 370)
     })
-    test('v1.rex.get_price_per_ms(1000)', async function () {
-        const state = await resources.v1.rex.get_state()
+    test('rex.price_per_ms(1000)', async function () {
+        const rex = await resources.v1.rex.get_state()
         const usage = await resources.getSampledUsage()
-        const price = resources.v1.rex.get_price_per_ms(state, usage, 1000)
+        const price = rex.price_per_ms(usage, 1000)
         assert.equal(String(price), '3.7010 EOS')
         assert.equal(price.value, 3.701)
         assert.equal(Number(price.units), 37010)
