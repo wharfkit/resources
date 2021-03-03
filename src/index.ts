@@ -3,6 +3,9 @@ import {API, APIClient} from '@greymass/eosio'
 import {PowerUpAPI} from './powerup'
 import {REXAPI} from './rex'
 
+export * from './powerup'
+export * from './rex'
+
 interface ResourcesOptions {
     api?: APIClient
     symbol?: string

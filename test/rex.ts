@@ -5,8 +5,7 @@ import {join as joinPath} from 'path'
 import {APIClient, Name} from '@greymass/eosio'
 import {MockProvider} from './utils/mock-provider'
 
-import {Resources} from '../src'
-import {REXState} from '../src/rex'
+import {Resources, REXState} from '../src'
 
 const eos = new APIClient({
     provider: new MockProvider(joinPath(__dirname, 'data'), 'https://eos.greymass.com'),
