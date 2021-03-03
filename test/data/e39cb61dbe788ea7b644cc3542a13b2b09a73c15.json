@@ -1,0 +1,18 @@
+{
+    "server_version": "58f90b96",
+    "chain_id": "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
+    "head_block_num": 171201019,
+    "last_irreversible_block_num": 171200690,
+    "last_irreversible_block_id": "0a3450b2145fc5a17e826441a33f661c46a0ea396669b8edfdac9069cb77506f",
+    "head_block_id": "0a3451fbaef525ecdb20508f354f3333c174ad0cfc98e0e5c80f9706a8347032",
+    "head_block_time": "2021-03-03T06:41:14.000",
+    "head_block_producer": "whaleex.com",
+    "virtual_block_cpu_limit": 200000,
+    "virtual_block_net_limit": 1048576000,
+    "block_cpu_limit": 200000,
+    "block_net_limit": 1048576,
+    "server_version_string": "v2.0.9",
+    "fork_db_head_block_num": 171201019,
+    "fork_db_head_block_id": "0a3451fbaef525ecdb20508f354f3333c174ad0cfc98e0e5c80f9706a8347032",
+    "server_full_version_string": "v2.0.9-58f90b9666dc37cf35eac5dafb6db1c4138024e7-dirty"
+}
