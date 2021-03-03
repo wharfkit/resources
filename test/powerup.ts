@@ -2,7 +2,7 @@ import 'mocha'
 import {strict as assert} from 'assert'
 import {join as joinPath} from 'path'
 
-import {APIClient, Asset} from '@greymass/eosio'
+import {APIClient, Asset, TimePointSec} from '@greymass/eosio'
 import {MockProvider} from './utils/mock-provider'
 
 import {PowerUpState, Resources} from '../src'
@@ -14,16 +14,7 @@ const eos = new APIClient({
 const resources = new Resources({api: eos})
 
 // Fixed timestamp for reproducable tests
-const fixedDate = 1614800043628
-
-// Mock state with overrides for the timestamp `now`
-async function getMockState() {
-    const powerup = await resources.v1.powerup.get_state()
-    // Override the local date generation to create a fixed adjusted_utilization for testing
-    powerup.cpu.now = fixedDate
-    powerup.net.now = fixedDate
-    return powerup
-}
+const fixedTimestamp = 1614800043
 
 suite('powerup', function () {
     this.slow(200)
@@ -51,9 +42,9 @@ suite('powerup', function () {
         // 0.0017273973739949453% represented as float
     })
     test('powerup.cpu.price_per_ms(1)', async function () {
-        const powerup = await getMockState()
+        const powerup = await resources.v1.powerup.get_state()
 
-        const price = powerup.cpu.price_per_ms(1)
+        const price = powerup.cpu.price_per_ms(1, {timestamp: fixedTimestamp})
         assert.equal(price, 0.0005683626179062772)
 
         const asset = Asset.from(price, '4,EOS')
@@ -62,9 +53,9 @@ suite('powerup', function () {
         assert.equal(Number(asset.units), 6)
     })
     test('powerup.cpu.price_per_ms(1000)', async function () {
-        const powerup = await getMockState()
+        const powerup = await resources.v1.powerup.get_state()
 
-        const price = powerup.cpu.price_per_ms(1000)
+        const price = powerup.cpu.price_per_ms(1000, {timestamp: fixedTimestamp})
         assert.equal(price, 0.5701758000922426)
 
         const asset = Asset.from(price, '4,EOS')
@@ -73,39 +64,39 @@ suite('powerup', function () {
         assert.equal(Number(asset.units), 5702)
     })
     test('powerup.cpu.frac<Asset>()', async function () {
-        const powerup = await getMockState()
+        const powerup = await resources.v1.powerup.get_state()
 
-        const frac1 = powerup.cpu.frac(Asset.from(1, '4,EOS'))
+        const frac1 = powerup.cpu.frac(Asset.from(1, '4,EOS'), {timestamp: fixedTimestamp})
         assert.equal(frac1, 394352560591)
 
-        const frac1000 = powerup.cpu.frac(Asset.from(1000, '4,EOS'))
+        const frac1000 = powerup.cpu.frac(Asset.from(1000, '4,EOS'), {timestamp: fixedTimestamp})
         assert.equal(frac1000, 394352590177050)
     })
     test('powerup.cpu.frac<String>()', async function () {
-        const powerup = await getMockState()
+        const powerup = await resources.v1.powerup.get_state()
 
-        const frac1 = powerup.cpu.frac('1.0000 EOS')
+        const frac1 = powerup.cpu.frac('1.0000 EOS', {timestamp: fixedTimestamp})
         assert.equal(frac1, 394352560591)
 
-        const frac1000 = powerup.cpu.frac('1000.0000 EOS')
+        const frac1000 = powerup.cpu.frac('1000.0000 EOS', {timestamp: fixedTimestamp})
         assert.equal(frac1000, 394352590177050)
     })
     test('powerup.net.frac<Asset>()', async function () {
-        const powerup = await getMockState()
+        const powerup = await resources.v1.powerup.get_state()
 
-        const frac1 = powerup.net.frac(Asset.from(1, '4,EOS'))
+        const frac1 = powerup.net.frac(Asset.from(1, '4,EOS'), {timestamp: fixedTimestamp})
         assert.equal(frac1, 399704686719)
 
-        const frac1000 = powerup.net.frac(Asset.from(1000, '4,EOS'))
+        const frac1000 = powerup.net.frac(Asset.from(1000, '4,EOS'), {timestamp: fixedTimestamp})
         assert.equal(frac1000, 399704824786356)
     })
     test('powerup.net.frac<String>()', async function () {
-        const powerup = await getMockState()
+        const powerup = await resources.v1.powerup.get_state()
 
-        const frac1 = powerup.net.frac('1.0000 EOS')
+        const frac1 = powerup.net.frac('1.0000 EOS', {timestamp: fixedTimestamp})
         assert.equal(frac1, 399704686719)
 
-        const frac1000 = powerup.net.frac('1000.0000 EOS')
+        const frac1000 = powerup.net.frac('1000.0000 EOS', {timestamp: fixedTimestamp})
         assert.equal(frac1000, 399704824786356)
     })
 })

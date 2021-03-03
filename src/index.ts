@@ -23,12 +23,7 @@ export class Resources {
 
     readonly api: APIClient
 
-    // target rex weight at end of any existing transition
-    rex_target_weight = Math.pow(10, 13)
-
-    // ms per day
-    mspd = 200 * 2 * 60 * 60 * 24
-
+    // the account to use when sampling usage for REX
     sampleAccount = 'b1'
 
     // token precision/symbol

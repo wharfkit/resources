@@ -5,11 +5,20 @@ import {
     Int64,
     Struct,
     TimePointSec,
+    TimePointType,
     UInt32,
     UInt64,
     UInt8,
 } from '@greymass/eosio'
 import {Resources} from '.'
+
+interface PowerUpStateOptions {
+    // timestamp to base adjusted_utilization off
+    timestamp?: TimePointType
+    // blockchain resource limits for calculating usage
+    virtual_block_cpu_limit?: UInt64
+    virtual_block_net_limit?: UInt64
+}
 
 @Struct.type('powerupstateresource')
 export class PowerUpStateResource extends Struct {
@@ -29,19 +38,19 @@ export class PowerUpStateResource extends Struct {
     @Struct.field('int64') adjusted_utilization!: Int64
     @Struct.field('time_point_sec') utilization_timestamp!: TimePointSec
 
-    // TODO: Get these loaded from a get_info call
-    public virtual_block_cpu_limit: UInt64 = UInt64.from(200000)
-    public virtual_block_net_limit: UInt64 = UInt64.from(1048576000)
+    private readonly default_block_cpu_limit: UInt64 = UInt64.from(200000)
+    private readonly default_block_net_limit: UInt64 = UInt64.from(1048576000)
 
-    // Ability to set the current time, primarily for unit tests
-    public now: number | undefined = undefined
-
-    public get us_per_day() {
-        return Number(this.virtual_block_cpu_limit) * 2 * 60 * 60 * 24
+    us_per_day(options?: PowerUpStateOptions) {
+        const limit =
+            options && options.virtual_block_cpu_limit
+                ? options.virtual_block_cpu_limit
+                : this.default_block_cpu_limit
+        return Number(limit) * 2 * 60 * 60 * 24
     }
 
-    public get ms_per_day() {
-        return (Number(this.virtual_block_cpu_limit) / 1000) * 2 * 60 * 60 * 24
+    ms_per_day(options?: PowerUpStateOptions) {
+        return this.us_per_day(options) / 1000
     }
 
     public get allocated() {
@@ -56,11 +65,11 @@ export class PowerUpStateResource extends Struct {
         return this.min_price.symbol
     }
 
-    frac(value: AssetType) {
+    frac(value: AssetType, options?: PowerUpStateOptions) {
         const asset = Asset.from(value)
-        const price = this.price_per_us(1)
+        const price = this.price_per_us(1, options)
         const allocated = this.allocated
-        const us_available = Math.floor(this.us_per_day * allocated)
+        const us_available = Math.floor(this.us_per_day(options) * allocated)
         const us_to_rent = Math.floor(asset.value / price)
         const frac = (us_to_rent / us_available) * Math.pow(10, 15)
         return Math.floor(frac)
@@ -77,13 +86,13 @@ export class PowerUpStateResource extends Struct {
         }
     }
 
-    utilization_increase(amount) {
+    utilization_increase(amount, options?: PowerUpStateOptions) {
         // Resources allocated to PowerUp
         const allocated = this.allocated
         const {weight} = this.cast()
 
         // Microseconds available per day available in PowerUp (factoring in shift)
-        const us_available = this.us_per_day * allocated
+        const us_available = this.us_per_day(options) * allocated
 
         // Percentage to rent
         const percentToRent = amount / us_available
@@ -138,16 +147,15 @@ export class PowerUpStateResource extends Struct {
         return fee
     }
 
-    determine_adjusted_utilization() {
+    determine_adjusted_utilization(options?: PowerUpStateOptions) {
         // Casting EOSIO types to usable formats for JS calculations
         const {decay_secs, utilization, utilization_timestamp} = this.cast()
         let {adjusted_utilization} = this.cast()
         // If utilization is less than adjusted, calculate real time value
         if (utilization < adjusted_utilization) {
-            // Allow overriding of the current timestamp for unit tests
-            const date = this.now ? this.now : Date.now()
             // Create now & adjust JS timestamp to match EOSIO timestamp values
-            const now: number = Math.floor(date / 1000)
+            const ts = options && options.timestamp ? options.timestamp : new Date()
+            const now = TimePointSec.from(ts).toMilliseconds() / 1000
             const diff: number = adjusted_utilization - utilization
             let delta: number = Math.floor(
                 diff * Math.exp(-(now - utilization_timestamp) / decay_secs)
@@ -158,16 +166,16 @@ export class PowerUpStateResource extends Struct {
         return adjusted_utilization
     }
 
-    price_per_ms(ms = 1): number {
-        return this.price_per_us(ms * 1000)
+    price_per_ms(ms = 1, options?: PowerUpStateOptions): number {
+        return this.price_per_us(ms * 1000, options)
     }
 
-    price_per_us(us = 1000): number {
+    price_per_us(us = 1000, options?: PowerUpStateOptions): number {
         // Determine the utilization increase by this action
-        const utilization_increase = this.utilization_increase(us)
+        const utilization_increase = this.utilization_increase(us, options)
 
         // Determine the adjusted utilization if needed
-        const adjusted_utilization = this.determine_adjusted_utilization()
+        const adjusted_utilization = this.determine_adjusted_utilization(options)
 
         // Derive the fee from the increase and utilization
         const fee = this.fee(utilization_increase, adjusted_utilization)
