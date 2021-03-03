@@ -21,11 +21,11 @@ export class REXState extends Struct {
         return this.total_lent.symbol
     }
 
-    price_per_ms(usage: SampleUsage, ms = 1): Asset {
+    price_per_ms(usage: SampleUsage, ms = 1): number {
         return this.price_per_us(usage, ms * 1000)
     }
 
-    price_per_us(usage: SampleUsage, us = 1000): Asset {
+    price_per_us(usage: SampleUsage, us = 1000): number {
         // Sample token units
         const tokens = Asset.fromUnits(10000, this.symbol)
 
@@ -42,7 +42,7 @@ export class REXState extends Struct {
         const cost = permicrosecond * us
 
         // Converting to an Asset
-        return Asset.fromUnits(cost, this.symbol)
+        return cost
     }
 }
 

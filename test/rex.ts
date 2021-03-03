@@ -2,7 +2,7 @@ import 'mocha'
 import {strict as assert} from 'assert'
 import {join as joinPath} from 'path'
 
-import {APIClient, Name} from '@greymass/eosio'
+import {APIClient, Asset} from '@greymass/eosio'
 import {MockProvider} from './utils/mock-provider'
 
 import {Resources, REXState} from '../src'
@@ -28,24 +28,30 @@ suite('rex', function () {
         const rex = await resources.v1.rex.get_state()
         const usage = await resources.getSampledUsage()
         const price = rex.price_per_ms(usage)
-        assert.equal(String(price), '0.0037 EOS')
-        assert.equal(price.value, 0.0037)
-        assert.equal(Number(price.units), 37)
+
+        const asset = Asset.fromUnits(price, '4,EOS')
+        assert.equal(String(asset), '0.0037 EOS')
+        assert.equal(asset.value, 0.0037)
+        assert.equal(Number(asset.units), 37)
     })
     test('rex.price_per_ms(10)', async function () {
         const rex = await resources.v1.rex.get_state()
         const usage = await resources.getSampledUsage()
         const price = rex.price_per_ms(usage, 10)
-        assert.equal(String(price), '0.0370 EOS')
-        assert.equal(price.value, 0.037)
-        assert.equal(Number(price.units), 370)
+
+        const asset = Asset.fromUnits(price, '4,EOS')
+        assert.equal(String(asset), '0.0370 EOS')
+        assert.equal(asset.value, 0.037)
+        assert.equal(Number(asset.units), 370)
     })
     test('rex.price_per_ms(1000)', async function () {
         const rex = await resources.v1.rex.get_state()
         const usage = await resources.getSampledUsage()
         const price = rex.price_per_ms(usage, 1000)
-        assert.equal(String(price), '3.7010 EOS')
-        assert.equal(price.value, 3.701)
-        assert.equal(Number(price.units), 37010)
+
+        const asset = Asset.fromUnits(price, '4,EOS')
+        assert.equal(String(asset), '3.7010 EOS')
+        assert.equal(asset.value, 3.701)
+        assert.equal(Number(asset.units), 37010)
     })
 })
