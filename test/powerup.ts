@@ -55,11 +55,11 @@ suite('powerup', function () {
     test('v1.powerup.get_cpu_frac(1)', async function () {
         const state = await resources.v1.powerup.get_state()
         const frac = resources.v1.powerup.get_cpu_frac(state, Asset.from(1, '4,EOS'))
-        assert.equal(frac, 213562146)
+        assert.equal(frac, 373558784346)
     })
-    test('v1.powerup.get_cpu_frac(100)', async function () {
+    test('v1.powerup.get_cpu_frac(1000)', async function () {
         const state = await resources.v1.powerup.get_state()
-        const frac = resources.v1.powerup.get_cpu_frac(state, Asset.from(100, '4,EOS'))
-        assert.equal(frac, 21356214675)
+        const frac = resources.v1.powerup.get_cpu_frac(state, Asset.from(1000, '4,EOS'))
+        assert.equal(frac, 373558784346347)
     })
 })

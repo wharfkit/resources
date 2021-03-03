@@ -30,10 +30,9 @@ export class PowerUpAPI {
         const price = this.get_price_per_ms(state, 1)
         const allocated = this.get_allocated(state)
         const mspdAvailable = this.parent.mspd * allocated
-        const percentToRent = tokens.value / price.value / mspdAvailable
-        const weight = Number(state.cpu.weight)
-        const utilization_increase = weight * percentToRent
-        return Math.floor(utilization_increase)
+        const msToRent = tokens.value / price.value
+        const cpu_frac = (msToRent / mspdAvailable) * Math.pow(10, 15)
+        return Math.floor(cpu_frac)
     }
 
     get_price_per_ms(state: PowerUpState, ms = 1): Asset {
