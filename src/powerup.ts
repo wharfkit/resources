@@ -136,9 +136,7 @@ export abstract class PowerUpStateResource extends Struct {
             const ts = options && options.timestamp ? options.timestamp : new Date()
             const now = TimePointSec.from(ts).toMilliseconds() / 1000
             const diff: number = adjusted_utilization - utilization
-            let delta: number = Math.floor(
-                diff * Math.exp(-(now - utilization_timestamp) / decay_secs)
-            )
+            let delta: number = diff * Math.exp(-(now - utilization_timestamp) / decay_secs)
             delta = Math.min(Math.max(delta, 0), diff) // Clamp the delta
             adjusted_utilization = utilization + delta
         }
@@ -164,8 +162,8 @@ export class PowerUpStateResourceNET extends PowerUpStateResource {
         const asset = Asset.from(value)
         const price = this.price_per_byte(1, options)
         const allocated = this.allocated
-        const available = Math.floor(this.per_day(options) * allocated)
-        const to_rent = Math.floor(asset.value / price)
+        const available = this.per_day(options) * allocated
+        const to_rent = asset.value / price
         const frac = (to_rent / available) * Math.pow(10, 15)
         return Math.floor(frac)
     }
@@ -207,8 +205,8 @@ export class PowerUpStateResourceCPU extends PowerUpStateResource {
         const asset = Asset.from(value)
         const price = this.price_per_us(1, options)
         const allocated = this.allocated
-        const available = Math.floor(this.per_day(options) * allocated)
-        const to_rent = Math.floor(asset.value / price)
+        const available = this.per_day(options) * allocated
+        const to_rent = asset.value / price
         const frac = (to_rent / available) * Math.pow(10, 15)
         return Math.floor(frac)
     }
