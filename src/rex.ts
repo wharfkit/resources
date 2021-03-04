@@ -21,6 +21,10 @@ export class REXState extends Struct {
         return this.total_lent.symbol
     }
 
+    public get precision() {
+        return this.total_lent.symbol.precision
+    }
+
     price_per_ms(usage: SampleUsage, ms = 1): number {
         return this.price_per_us(usage, ms * 1000)
     }
@@ -42,7 +46,7 @@ export class REXState extends Struct {
         const cost = permicrosecond * us
 
         // Converting to an Asset
-        return cost
+        return cost / Math.pow(10, this.precision)
     }
 }
 

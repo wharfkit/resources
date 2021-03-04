@@ -29,7 +29,7 @@ suite('rex', function () {
         const usage = await resources.getSampledUsage()
         const price = rex.price_per_ms(usage)
 
-        const asset = Asset.fromUnits(price, '4,EOS')
+        const asset = Asset.from(price, '4,EOS')
         assert.equal(String(asset), '0.0037 EOS')
         assert.equal(asset.value, 0.0037)
         assert.equal(Number(asset.units), 37)
@@ -39,7 +39,7 @@ suite('rex', function () {
         const usage = await resources.getSampledUsage()
         const price = rex.price_per_ms(usage, 10)
 
-        const asset = Asset.fromUnits(price, '4,EOS')
+        const asset = Asset.from(price, '4,EOS')
         assert.equal(String(asset), '0.0370 EOS')
         assert.equal(asset.value, 0.037)
         assert.equal(Number(asset.units), 370)
@@ -49,7 +49,7 @@ suite('rex', function () {
         const usage = await resources.getSampledUsage()
         const price = rex.price_per_ms(usage, 1000)
 
-        const asset = Asset.fromUnits(price, '4,EOS')
+        const asset = Asset.from(price, '4,EOS')
         assert.equal(String(asset), '3.7010 EOS')
         assert.equal(asset.value, 3.701)
         assert.equal(Number(asset.units), 37010)
