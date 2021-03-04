@@ -20,8 +20,7 @@ interface PowerUpStateOptions {
     virtual_block_net_limit?: UInt64
 }
 
-@Struct.type('powerupstateresource')
-export class PowerUpStateResource extends Struct {
+export abstract class PowerUpStateResource extends Struct {
     @Struct.field('uint8') version!: UInt8
     @Struct.field('int64') weight!: Int64
     @Struct.field('int64') weight_ratio!: Int64
@@ -38,20 +37,10 @@ export class PowerUpStateResource extends Struct {
     @Struct.field('int64') adjusted_utilization!: Int64
     @Struct.field('time_point_sec') utilization_timestamp!: TimePointSec
 
-    private readonly default_block_cpu_limit: UInt64 = UInt64.from(200000)
-    private readonly default_block_net_limit: UInt64 = UInt64.from(1048576000)
+    readonly default_block_cpu_limit: UInt64 = UInt64.from(200000)
+    readonly default_block_net_limit: UInt64 = UInt64.from(1048576000)
 
-    us_per_day(options?: PowerUpStateOptions) {
-        const limit =
-            options && options.virtual_block_cpu_limit
-                ? options.virtual_block_cpu_limit
-                : this.default_block_cpu_limit
-        return Number(limit) * 2 * 60 * 60 * 24
-    }
-
-    ms_per_day(options?: PowerUpStateOptions) {
-        return this.us_per_day(options) / 1000
-    }
+    abstract per_day(options?: PowerUpStateOptions): number
 
     public get allocated() {
         return 1 - Number(this.weight_ratio) / Number(this.target_weight_ratio) / 100
@@ -63,16 +52,6 @@ export class PowerUpStateResource extends Struct {
 
     public get symbol() {
         return this.min_price.symbol
-    }
-
-    frac(value: AssetType, options?: PowerUpStateOptions) {
-        const asset = Asset.from(value)
-        const price = this.price_per_us(1, options)
-        const allocated = this.allocated
-        const us_available = Math.floor(this.us_per_day(options) * allocated)
-        const us_to_rent = Math.floor(asset.value / price)
-        const frac = (us_to_rent / us_available) * Math.pow(10, 15)
-        return Math.floor(frac)
     }
 
     cast() {
@@ -92,14 +71,14 @@ export class PowerUpStateResource extends Struct {
         const {weight} = this.cast()
 
         // Microseconds available per day available in PowerUp (factoring in shift)
-        const us_available = this.us_per_day(options) * allocated
+        const available = this.per_day(options) * allocated
 
         // Percentage to rent
-        const percentToRent = amount / us_available
+        const percentToRent = amount / available
         return weight * percentToRent
     }
 
-    private price_function(utilization: number): number {
+    price_function(utilization: number): number {
         const {exponent, weight} = this.cast()
         const max_price: number = this.max_price.value
         const min_price: number = this.min_price.value
@@ -113,7 +92,7 @@ export class PowerUpStateResource extends Struct {
         return price
     }
 
-    private price_integral_delta(start_utilization: number, end_utilization: number): number {
+    price_integral_delta(start_utilization: number, end_utilization: number): number {
         const {exponent, weight} = this.cast()
         const max_price: number = this.max_price.value
         const min_price: number = this.min_price.value
@@ -128,7 +107,7 @@ export class PowerUpStateResource extends Struct {
         )
     }
 
-    private fee(utilization_increase, adjusted_utilization) {
+    fee(utilization_increase, adjusted_utilization) {
         const {utilization, weight} = this.cast()
         let start_utilization: number = utilization
         const end_utilization: number = start_utilization + utilization_increase
@@ -165,6 +144,74 @@ export class PowerUpStateResource extends Struct {
         }
         return adjusted_utilization
     }
+}
+
+@Struct.type('powerupstateresourcenet')
+export class PowerUpStateResourceNET extends PowerUpStateResource {
+    per_day(options?: PowerUpStateOptions) {
+        const limit =
+            options && options.virtual_block_net_limit
+                ? options.virtual_block_net_limit
+                : this.default_block_net_limit
+        return Number(limit) * 2 * 60 * 60 * 24
+    }
+
+    kb_per_day(options?: PowerUpStateOptions) {
+        return this.per_day(options) / 1000
+    }
+
+    frac(value: AssetType, options?: PowerUpStateOptions) {
+        const asset = Asset.from(value)
+        const price = this.price_per_byte(1, options)
+        const allocated = this.allocated
+        const available = Math.floor(this.per_day(options) * allocated)
+        const to_rent = Math.floor(asset.value / price)
+        const frac = (to_rent / available) * Math.pow(10, 15)
+        return Math.floor(frac)
+    }
+
+    price_per_kb(bytes = 1, options?: PowerUpStateOptions): number {
+        return this.price_per_byte(bytes * 1000, options)
+    }
+
+    price_per_byte(bytes = 1000, options?: PowerUpStateOptions): number {
+        // Determine the utilization increase by this action
+        const utilization_increase = this.utilization_increase(bytes, options)
+
+        // Determine the adjusted utilization if needed
+        const adjusted_utilization = this.determine_adjusted_utilization(options)
+
+        // Derive the fee from the increase and utilization
+        const fee = this.fee(utilization_increase, adjusted_utilization)
+
+        // Return the asset version of the fee
+        return fee
+    }
+}
+
+@Struct.type('powerupstateresourcecpu')
+export class PowerUpStateResourceCPU extends PowerUpStateResource {
+    per_day(options?: PowerUpStateOptions) {
+        const limit =
+            options && options.virtual_block_cpu_limit
+                ? options.virtual_block_cpu_limit
+                : this.default_block_cpu_limit
+        return Number(limit) * 2 * 60 * 60 * 24
+    }
+
+    ms_per_day(options?: PowerUpStateOptions) {
+        return this.per_day(options) / 1000
+    }
+
+    frac(value: AssetType, options?: PowerUpStateOptions) {
+        const asset = Asset.from(value)
+        const price = this.price_per_us(1, options)
+        const allocated = this.allocated
+        const available = Math.floor(this.per_day(options) * allocated)
+        const to_rent = Math.floor(asset.value / price)
+        const frac = (to_rent / available) * Math.pow(10, 15)
+        return Math.floor(frac)
+    }
 
     price_per_ms(ms = 1, options?: PowerUpStateOptions): number {
         return this.price_per_us(ms * 1000, options)
@@ -179,6 +226,7 @@ export class PowerUpStateResource extends Struct {
 
         // Derive the fee from the increase and utilization
         const fee = this.fee(utilization_increase, adjusted_utilization)
+
         // Return the asset version of the fee
         return fee
     }
@@ -187,8 +235,8 @@ export class PowerUpStateResource extends Struct {
 @Struct.type('powerupstate')
 export class PowerUpState extends Struct {
     @Struct.field('uint8') version!: UInt8
-    @Struct.field(PowerUpStateResource) net!: PowerUpStateResource
-    @Struct.field(PowerUpStateResource) cpu!: PowerUpStateResource
+    @Struct.field(PowerUpStateResourceNET) net!: PowerUpStateResourceNET
+    @Struct.field(PowerUpStateResourceCPU) cpu!: PowerUpStateResourceCPU
     @Struct.field('uint32') powerup_days!: UInt32
     @Struct.field('asset') min_powerup_fee!: Asset
 }
