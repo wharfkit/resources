@@ -10,7 +10,7 @@ import {
     UInt64,
     UInt8,
 } from '@greymass/eosio'
-import {Resources} from '.'
+import {Resources, SampleUsage} from '.'
 
 interface PowerUpStateOptions {
     // timestamp to base adjusted_utilization off
@@ -65,17 +65,10 @@ export abstract class PowerUpStateResource extends Struct {
         }
     }
 
-    utilization_increase(amount, options?: PowerUpStateOptions) {
-        // Resources allocated to PowerUp
-        const allocated = this.allocated
-        const {weight} = this.cast()
-
-        // Microseconds available per day available in PowerUp (factoring in shift)
-        const available = this.per_day(options) * allocated
-
-        // Percentage to rent
-        const percentToRent = amount / available
-        return weight * percentToRent
+    utilization_increase(sample: number, amount) {
+        const weight_per_us = 1 / sample
+        const weight_required = amount * weight_per_us
+        return weight_required
     }
 
     price_function(utilization: number): number {
@@ -158,9 +151,9 @@ export class PowerUpStateResourceNET extends PowerUpStateResource {
         return this.per_day(options) / 1000
     }
 
-    frac(value: AssetType, options?: PowerUpStateOptions) {
+    frac(usage: SampleUsage, value: AssetType, options?: PowerUpStateOptions) {
         const asset = Asset.from(value)
-        const price = this.price_per_byte(1, options)
+        const price = this.price_per_byte(usage, 1, options)
         const allocated = this.allocated
         const available = this.per_day(options) * allocated
         const to_rent = asset.value / price
@@ -168,13 +161,13 @@ export class PowerUpStateResourceNET extends PowerUpStateResource {
         return Math.floor(frac)
     }
 
-    price_per_kb(bytes = 1, options?: PowerUpStateOptions): number {
-        return this.price_per_byte(bytes * 1000, options)
+    price_per_kb(usage: SampleUsage, bytes = 1, options?: PowerUpStateOptions): number {
+        return this.price_per_byte(usage, bytes * 1000, options)
     }
 
-    price_per_byte(bytes = 1000, options?: PowerUpStateOptions): number {
+    price_per_byte(usage: SampleUsage, bytes = 1000, options?: PowerUpStateOptions): number {
         // Determine the utilization increase by this action
-        const utilization_increase = this.utilization_increase(bytes, options)
+        const utilization_increase = this.utilization_increase(usage.net, bytes)
 
         // Determine the adjusted utilization if needed
         const adjusted_utilization = this.determine_adjusted_utilization(options)
@@ -201,9 +194,9 @@ export class PowerUpStateResourceCPU extends PowerUpStateResource {
         return this.per_day(options) / 1000
     }
 
-    frac(value: AssetType, options?: PowerUpStateOptions) {
+    frac(usage: SampleUsage, value: AssetType, options?: PowerUpStateOptions) {
         const asset = Asset.from(value)
-        const price = this.price_per_us(1, options)
+        const price = this.price_per_us(usage, 1, options)
         const allocated = this.allocated
         const available = this.per_day(options) * allocated
         const to_rent = asset.value / price
@@ -211,13 +204,13 @@ export class PowerUpStateResourceCPU extends PowerUpStateResource {
         return Math.floor(frac)
     }
 
-    price_per_ms(ms = 1, options?: PowerUpStateOptions): number {
-        return this.price_per_us(ms * 1000, options)
+    price_per_ms(usage: SampleUsage, ms = 1, options?: PowerUpStateOptions): number {
+        return this.price_per_us(usage, ms * 1000, options)
     }
 
-    price_per_us(us = 1000, options?: PowerUpStateOptions): number {
+    price_per_us(usage: SampleUsage, us = 1000, options?: PowerUpStateOptions): number {
         // Determine the utilization increase by this action
-        const utilization_increase = this.utilization_increase(us, options)
+        const utilization_increase = this.utilization_increase(usage.cpu, us)
 
         // Determine the adjusted utilization if needed
         const adjusted_utilization = this.determine_adjusted_utilization(options)
