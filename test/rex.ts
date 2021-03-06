@@ -13,7 +13,7 @@ const eos = new APIClient({
 
 const resources = new Resources({api: eos})
 
-suite('rex', function () {
+suite('[eos] rex', function () {
     this.slow(200)
     test('v1.rex.get_state', async function () {
         const rex = await resources.v1.rex.get_state()
@@ -50,8 +50,8 @@ suite('rex', function () {
         const price = rex.price_per_ms(usage, 1000)
 
         const asset = Asset.from(price, '4,EOS')
-        assert.equal(String(asset), '3.7010 EOS')
-        assert.equal(asset.value, 3.701)
-        assert.equal(Number(asset.units), 37010)
+        assert.equal(String(asset), '3.7017 EOS')
+        assert.equal(asset.value, 3.7017)
+        assert.equal(Number(asset.units), 37017)
     })
 })

@@ -2,12 +2,12 @@ import 'mocha'
 import {strict as assert} from 'assert'
 import fetch from 'node-fetch'
 
-import {APIClient} from '@greymass/eosio'
+import {Asset, APIClient} from '@greymass/eosio'
 
 import {PowerUpState, Resources} from '../src'
 
 suite('core', function () {
-    this.slow(200)
+    this.slow(20000)
     test('init - url + fetch', async function () {
         // pass fetch and url to resources directly
         const test = new Resources({

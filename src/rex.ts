@@ -1,4 +1,4 @@
-import {Resources, SampleUsage} from './'
+import {BNPrecision, Resources, SampleUsage} from './'
 
 import {Asset, Struct, UInt64, UInt8} from '@greymass/eosio'
 
@@ -25,11 +25,11 @@ export class REXState extends Struct {
         return this.total_lent.symbol.precision
     }
 
-    price_per_ms(usage: SampleUsage, ms = 1): number {
-        return this.price_per_us(usage, ms * 1000)
+    price_per_ms(sample: SampleUsage, ms = 1): number {
+        return this.price_per_us(sample, ms * 1000)
     }
 
-    price_per_us(usage: SampleUsage, us = 1000): number {
+    price_per_us(sample: SampleUsage, us = 1000): number {
         // Sample token units
         const tokens = Asset.fromUnits(10000, this.symbol)
 
@@ -37,7 +37,7 @@ export class REXState extends Struct {
         const bancor = Number(tokens.units) / (this.total_rent.value / this.total_unlent.value)
 
         // The ratio of the number of tokens received vs the sampled cpu values
-        const microseconds = bancor * usage.cpu
+        const microseconds = bancor * (Number(sample.cpu) / BNPrecision)
 
         // The token units spent per microsecond
         const permicrosecond = Number(tokens.units) / microseconds

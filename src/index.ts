@@ -1,4 +1,5 @@
-import {API, APIClient, APIClientOptions, FetchProvider} from '@greymass/eosio'
+import {API, APIClient, APIClientOptions, FetchProvider, UInt128} from '@greymass/eosio'
+import BN from 'bn.js'
 
 import {PowerUpAPI} from './powerup'
 import {REXAPI} from './rex'
@@ -14,9 +15,11 @@ interface ResourcesOptions extends APIClientOptions {
 
 export interface SampleUsage {
     account: API.v1.AccountObject
-    cpu: number
-    net: number
+    cpu: UInt128
+    net: UInt128
 }
+
+export const BNPrecision = new BN(1000 * 1000)
 
 export class Resources {
     static __className = 'Resources'
@@ -46,10 +49,26 @@ export class Resources {
 
     async getSampledUsage(): Promise<SampleUsage> {
         const account = await this.api.v1.chain.get_account(this.sampleAccount)
+        const us = UInt128.from(account.cpu_limit.max.value.mul(BNPrecision))
+        const byte = UInt128.from(account.net_limit.max.value.mul(BNPrecision))
+
+        const cpu_weight = UInt128.from(account.cpu_weight.value)
+        const net_weight = UInt128.from(account.cpu_weight.value)
+
         return {
             account,
-            cpu: Number(account.cpu_limit.max.value) / Number(account.cpu_weight.value),
-            net: Number(account.net_limit.max.value) / Number(account.net_weight.value),
+            cpu: divCeil(us.value, cpu_weight.value),
+            net: divCeil(byte.value, net_weight.value),
         }
     }
+}
+
+function divCeil(num: BN, den: BN): UInt128 {
+    let v: BN = num.div(den)
+    const zero = new BN(0)
+    const one = new BN(1)
+    if (num.mod(den).gt(zero)) {
+        v = v.sub(one)
+    }
+    return UInt128.from(v)
 }

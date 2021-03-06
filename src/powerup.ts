@@ -6,11 +6,13 @@ import {
     Struct,
     TimePointSec,
     TimePointType,
+    UInt128,
     UInt32,
     UInt64,
     UInt8,
 } from '@greymass/eosio'
-import {Resources, SampleUsage} from '.'
+
+import {BNPrecision, Resources, SampleUsage} from '.'
 
 interface PowerUpStateOptions {
     // timestamp to base adjusted_utilization off
@@ -62,13 +64,14 @@ export abstract class PowerUpStateResource extends Struct {
             utilization: Number(this.utilization),
             utilization_timestamp: Number(this.utilization_timestamp.value),
             weight: Number(this.weight),
+            weight_ratio: Number(this.weight_ratio),
         }
     }
 
-    utilization_increase(sample: number, amount) {
-        const weight_per_us = 1 / sample
-        const weight_required = amount * weight_per_us
-        return weight_required
+    utilization_increase(sample: UInt128, amount) {
+        const weight_per_unit = 1 / (Number(sample) / BNPrecision)
+        const weight_required = amount * weight_per_unit
+        return Math.floor(weight_required)
     }
 
     price_function(utilization: number): number {
@@ -151,14 +154,14 @@ export class PowerUpStateResourceNET extends PowerUpStateResource {
         return this.per_day(options) / 1000
     }
 
-    frac(usage: SampleUsage, value: AssetType, options?: PowerUpStateOptions) {
-        const asset = Asset.from(value)
-        const price = this.price_per_byte(usage, 1, options)
-        const allocated = this.allocated
-        const available = this.per_day(options) * allocated
-        const to_rent = asset.value / price
-        const frac = (to_rent / available) * Math.pow(10, 15)
-        return Math.floor(frac)
+    byte_to_weight(sample: UInt128, bytes: number): number {
+        return Math.floor((bytes / Number(sample)) * BNPrecision)
+    }
+
+    frac(usage: SampleUsage, bytes: number) {
+        const {weight} = this.cast()
+        const frac = this.byte_to_weight(usage.net, bytes) / weight
+        return Math.floor(frac * Math.pow(10, 15))
     }
 
     price_per_kb(usage: SampleUsage, bytes = 1, options?: PowerUpStateOptions): number {
@@ -175,8 +178,12 @@ export class PowerUpStateResourceNET extends PowerUpStateResource {
         // Derive the fee from the increase and utilization
         const fee = this.fee(utilization_increase, adjusted_utilization)
 
-        // Return the asset version of the fee
-        return fee
+        // Force the fee up to the next highest value of precision
+        const precision = Math.pow(10, 4)
+        const value = Math.ceil(fee * precision) / precision
+
+        // Return the modified fee
+        return value
     }
 }
 
@@ -194,14 +201,18 @@ export class PowerUpStateResourceCPU extends PowerUpStateResource {
         return this.per_day(options) / 1000
     }
 
-    frac(usage: SampleUsage, value: AssetType, options?: PowerUpStateOptions) {
-        const asset = Asset.from(value)
-        const price = this.price_per_us(usage, 1, options)
-        const allocated = this.allocated
-        const available = this.per_day(options) * allocated
-        const to_rent = asset.value / price
-        const frac = (to_rent / available) * Math.pow(10, 15)
-        return Math.floor(frac)
+    weight_to_us(sample: UInt128, us: number): number {
+        return Math.ceil((us * Number(sample)) / BNPrecision)
+    }
+
+    us_to_weight(sample: UInt128, us: number): number {
+        return Math.floor((us / Number(sample)) * BNPrecision)
+    }
+
+    frac(usage: SampleUsage, us: number) {
+        const {weight} = this.cast()
+        const frac = this.us_to_weight(usage.cpu, us) / weight
+        return Math.floor(frac * Math.pow(10, 15))
     }
 
     price_per_ms(usage: SampleUsage, ms = 1, options?: PowerUpStateOptions): number {
@@ -218,8 +229,12 @@ export class PowerUpStateResourceCPU extends PowerUpStateResource {
         // Derive the fee from the increase and utilization
         const fee = this.fee(utilization_increase, adjusted_utilization)
 
-        // Return the asset version of the fee
-        return fee
+        // Force the fee up to the next highest value of precision
+        const precision = Math.pow(10, 4)
+        const value = Math.ceil(fee * precision) / precision
+
+        // Return the modified fee
+        return value
     }
 }
 
