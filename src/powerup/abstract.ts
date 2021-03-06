@@ -10,7 +10,7 @@ import {
     UInt8,
 } from '@greymass/eosio'
 
-import {BNPrecision} from '..'
+import BN from 'bn.js'
 import {PowerUpStateOptions} from './options'
 
 export abstract class PowerUpStateResource extends Struct {
@@ -35,18 +35,22 @@ export abstract class PowerUpStateResource extends Struct {
 
     abstract per_day(options?: PowerUpStateOptions): number
 
+    // Get the current number of allocated units (shift from REX -> PowerUp)
     public get allocated() {
         return 1 - Number(this.weight_ratio) / Number(this.target_weight_ratio) / 100
     }
 
+    // Get the current percentage of reserved units
     public get reserved() {
         return Number(this.utilization) / Number(this.weight)
     }
 
+    // Get the symbol definition for the token
     public get symbol() {
         return this.min_price.symbol
     }
 
+    // Common casting for typed values to numbers
     cast() {
         return {
             adjusted_utilization: Number(this.adjusted_utilization),
@@ -59,12 +63,16 @@ export abstract class PowerUpStateResource extends Struct {
         }
     }
 
-    utilization_increase(sample: UInt128, amount) {
-        const weight_per_unit = 1 / (Number(sample) / BNPrecision)
-        const weight_required = amount * weight_per_unit
-        return Math.floor(weight_required)
+    // Mimic: https://github.com/EOSIO/eosio.contracts/blob/d7bc0a5cc8c0c2edd4dc61b0126517d0cb46fd94/contracts/eosio.system/src/powerup.cpp#L358
+    utilization_increase(sample: UInt128, frac) {
+        const {weight} = this
+        const frac128 = UInt128.from(frac)
+        const utilization_increase =
+            new BN(weight.value.mul(new BN(frac128.value))) / Math.pow(10, 15)
+        return Math.ceil(utilization_increase)
     }
 
+    // Mimic: https://github.com/EOSIO/eosio.contracts/blob/d7bc0a5cc8c0c2edd4dc61b0126517d0cb46fd94/contracts/eosio.system/src/powerup.cpp#L284-L298
     price_function(utilization: number): number {
         const {exponent, weight} = this.cast()
         const max_price: number = this.max_price.value
@@ -79,6 +87,7 @@ export abstract class PowerUpStateResource extends Struct {
         return price
     }
 
+    // Mimic: https://github.com/EOSIO/eosio.contracts/blob/d7bc0a5cc8c0c2edd4dc61b0126517d0cb46fd94/contracts/eosio.system/src/powerup.cpp#L274-L280
     price_integral_delta(start_utilization: number, end_utilization: number): number {
         const {exponent, weight} = this.cast()
         const max_price: number = this.max_price.value
@@ -94,10 +103,13 @@ export abstract class PowerUpStateResource extends Struct {
         return delta
     }
 
+    // Mimic: https://github.com/EOSIO/eosio.contracts/blob/d7bc0a5cc8c0c2edd4dc61b0126517d0cb46fd94/contracts/eosio.system/src/powerup.cpp#L262-L315
     fee(utilization_increase, adjusted_utilization) {
         const {utilization, weight} = this.cast()
+
         let start_utilization: number = utilization
         const end_utilization: number = start_utilization + utilization_increase
+
         let fee = 0
         if (start_utilization < adjusted_utilization) {
             fee +=
@@ -106,13 +118,13 @@ export abstract class PowerUpStateResource extends Struct {
                 weight
             start_utilization = adjusted_utilization
         }
-
         if (start_utilization < end_utilization) {
             fee += this.price_integral_delta(start_utilization, end_utilization)
         }
         return fee
     }
 
+    // Mimic: https://github.com/EOSIO/eosio.contracts/blob/d7bc0a5cc8c0c2edd4dc61b0126517d0cb46fd94/contracts/eosio.system/src/powerup.cpp#L105-L117
     determine_adjusted_utilization(options?: PowerUpStateOptions) {
         // Casting EOSIO types to usable formats for JS calculations
         const {decay_secs, utilization, utilization_timestamp} = this.cast()

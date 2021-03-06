@@ -6,7 +6,16 @@ import {PowerUpStateOptions} from './options'
 
 @Struct.type('powerupstateresourcenet')
 export class PowerUpStateResourceNET extends PowerUpStateResource {
-    per_day(options?: PowerUpStateOptions) {
+    // Return smallest units per day, bytes
+    per_day = (options?: PowerUpStateOptions) => this.bytes_per_day(options)
+
+    // Return kb per day
+    kb_per_day(options?: PowerUpStateOptions) {
+        return this.bytes_per_day(options) / 1000
+    }
+
+    // Return bytes per day
+    bytes_per_day(options?: PowerUpStateOptions) {
         const limit =
             options && options.virtual_block_net_limit
                 ? options.virtual_block_net_limit
@@ -14,27 +23,42 @@ export class PowerUpStateResourceNET extends PowerUpStateResource {
         return Number(limit) * 2 * 60 * 60 * 24
     }
 
-    kb_per_day(options?: PowerUpStateOptions) {
-        return this.per_day(options) / 1000
+    // Convert weight to bytes
+    weight_to_bytes(sample: UInt128, weight: number): number {
+        return Math.ceil((weight * Number(sample)) / BNPrecision)
     }
 
-    byte_to_weight(sample: UInt128, bytes: number): number {
+    // Convert bytes to weight
+    bytes_to_weight(sample: UInt128, bytes: number): number {
         return Math.floor((bytes / Number(sample)) * BNPrecision)
     }
 
-    frac(usage: SampleUsage, bytes: number) {
+    // Default frac generation by smallest unit type
+    frac = (usage: SampleUsage, bytes: number) => this.frac_by_bytes(usage, bytes)
+
+    // Frac generation by kb
+    frac_by_kb = (usage: SampleUsage, bytes: number) => this.frac_by_bytes(usage, bytes * 1000)
+
+    // Frac generation by bytes
+    frac_by_bytes(usage: SampleUsage, bytes: number) {
         const {weight} = this.cast()
-        const frac = this.byte_to_weight(usage.net, bytes) / weight
+        const frac = this.bytes_to_weight(usage.net, bytes) / weight
         return Math.floor(frac * Math.pow(10, 15))
     }
 
-    price_per_kb(usage: SampleUsage, bytes = 1, options?: PowerUpStateOptions): number {
-        return this.price_per_byte(usage, bytes * 1000, options)
-    }
+    // Price generation by smallest units, bytes
+    price_per = (usage: SampleUsage, bytes = 1000, options?: PowerUpStateOptions) =>
+        this.price_per_byte(usage, bytes, options)
 
+    // Price generation by kb
+    price_per_kb = (usage: SampleUsage, bytes = 1, options?: PowerUpStateOptions): number =>
+        this.price_per_byte(usage, bytes * 1000, options)
+
+    // Price generation by bytes
     price_per_byte(usage: SampleUsage, bytes = 1000, options?: PowerUpStateOptions): number {
         // Determine the utilization increase by this action
-        const utilization_increase = this.utilization_increase(usage.net, bytes)
+        const frac = UInt128.from(this.frac(usage, bytes))
+        const utilization_increase = this.utilization_increase(usage.net, frac)
 
         // Determine the adjusted utilization if needed
         const adjusted_utilization = this.determine_adjusted_utilization(options)
