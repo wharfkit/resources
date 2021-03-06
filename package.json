@@ -21,6 +21,7 @@
     },
     "dependencies": {
         "@greymass/eosio": "^0.3.2",
+        "bn.js": "^4.11.9",
         "tslib": "^2.1.0"
     },
     "devDependencies": {
