@@ -13,7 +13,7 @@ const eos = new APIClient({
 
 const resources = new Resources({api: eos})
 
-suite('[eos] rex', function () {
+suite('[eos] rex calculations', function () {
     this.slow(200)
     test('v1.rex.get_state', async function () {
         const rex = await resources.v1.rex.get_state()

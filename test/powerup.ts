@@ -34,7 +34,7 @@ suite('powerup', function () {
     })
 })
 
-suite('[eos] powerup - cpu', function () {
+suite('[eos] powerup - cpu calculations', function () {
     this.slow(200)
     setup(async function () {
         const info = await resources_eos.api.v1.chain.get_info()
@@ -71,7 +71,6 @@ suite('[eos] powerup - cpu', function () {
         const price = powerup.cpu.price_per_ms(sample, 60, this.testFixture)
         assert.equal(price, 0.0305)
     })
-
     test('powerup.cpu.price_per_us(1)', async function () {
         const powerup = await resources_eos.v1.powerup.get_state()
         const sample = await resources_eos.getSampledUsage()
@@ -125,7 +124,7 @@ suite('[eos] powerup - cpu', function () {
     })
 })
 
-suite('[eos] powerup - net', function () {
+suite('[eos] powerup - net calculations', function () {
     this.slow(200)
     setup(async function () {
         const info = await resources_eos.api.v1.chain.get_info()
@@ -167,7 +166,7 @@ suite('[eos] powerup - net', function () {
     })
 })
 
-suite('[jungle] powerup - cpu', function () {
+suite('[jungle] powerup - cpu calculations', function () {
     this.slow(200)
     setup(async function () {
         const info = await resources_jungle.api.v1.chain.get_info()
