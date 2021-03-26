@@ -1,6 +1,6 @@
 import {BNPrecision, Resources, SampleUsage} from './'
 
-import {Asset, Struct, UInt64, UInt8} from '@greymass/eosio'
+import {Asset, Name, NameType, Struct, UInt64, UInt8} from '@greymass/eosio'
 
 @Struct.type('rexstate')
 export class REXState extends Struct {
@@ -25,25 +25,21 @@ export class REXState extends Struct {
         return this.total_lent.symbol.precision
     }
 
-    price_per_ms(sample: SampleUsage, ms = 1): number {
-        return this.price_per_us(sample, ms * 1000)
-    }
-
-    price_per_us(sample: SampleUsage, us = 1000): number {
+    price_per(sample: SampleUsage, unit = 1000): number {
         // Sample token units
         const tokens = Asset.fromUnits(10000, this.symbol)
 
         // Spending 1 EOS (10000 units) on REX gives this many tokens
         const bancor = Number(tokens.units) / (this.total_rent.value / this.total_unlent.value)
 
-        // The ratio of the number of tokens received vs the sampled cpu values
-        const microseconds = bancor * (Number(sample.cpu) / BNPrecision)
+        // The ratio of the number of tokens received vs the sampled values
+        const unitPrice = bancor * (Number(sample.cpu) / BNPrecision)
 
-        // The token units spent per microsecond
-        const permicrosecond = Number(tokens.units) / microseconds
+        // The token units spent per unit
+        const perunit = Number(tokens.units) / unitPrice
 
-        // Multiply the per microsecond cost by the us requested
-        const cost = permicrosecond * us
+        // Multiply the per unit cost by the units requested
+        const cost = perunit * unit
 
         // Converting to an Asset
         return cost / Math.pow(10, this.precision)
