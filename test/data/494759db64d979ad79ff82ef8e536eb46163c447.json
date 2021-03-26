@@ -1,23 +1,23 @@
 {
     "account_name": "b1",
-    "head_block_num": 170971192,
-    "head_block_time": "2021-03-01T22:45:10.500",
+    "head_block_num": 175260578,
+    "head_block_time": "2021-03-26T18:47:30.000",
     "privileged": false,
     "last_code_update": "1970-01-01T00:00:00.000",
     "created": "2018-06-09T11:58:03.500",
-    "core_liquid_balance": "1999999.6971 EOS",
+    "core_liquid_balance": "1666666.3873 EOS",
     "ram_quota": "34307705487",
-    "net_weight": "398984152946",
-    "cpu_weight": "345999985055",
+    "net_weight": "398984152956",
+    "cpu_weight": "345999985056",
     "net_limit": {
-        "used": 241,
-        "available": "45422956249146",
-        "max": "45422956249387"
+        "used": 145,
+        "available": "19520940373579",
+        "max": "19520940373724"
     },
     "cpu_limit": {
-        "used": 1616,
-        "available": 3028719260,
-        "max": 3028720876
+        "used": 198,
+        "available": 960229699,
+        "max": 960229897
     },
     "ram_usage": 4686,
     "permissions": [
@@ -70,23 +70,23 @@
     ],
     "total_resources": {
         "owner": "b1",
-        "net_weight": "39898415.2946 EOS",
-        "cpu_weight": "34599998.5055 EOS",
+        "net_weight": "39898415.2956 EOS",
+        "cpu_weight": "34599998.5056 EOS",
         "ram_bytes": "34307704087"
     },
     "self_delegated_bandwidth": {
         "from": "b1",
         "to": "b1",
-        "net_weight": "39898414.2946 EOS",
-        "cpu_weight": "34599997.5055 EOS"
+        "net_weight": "39898414.2956 EOS",
+        "cpu_weight": "34599997.5056 EOS"
     },
     "refund_request": null,
     "voter_info": {
         "owner": "b1",
         "proxy": "sub2.b1",
         "producers": [],
-        "staked": "745004118001",
-        "last_vote_weight": "1692477144167858944.00000000000000000",
+        "staked": "745004118012",
+        "last_vote_weight": "1908201170602062080.00000000000000000",
         "proxied_vote_weight": "0.00000000000000000",
         "is_proxy": 0,
         "flags1": 0,

@@ -21,37 +21,37 @@ suite('[eos] rex calculations', function () {
     })
     test('rex.reserved', async function () {
         const rex = await resources.v1.rex.get_state()
-        assert.equal(rex.reserved, 0.5565968415413414)
-        // 55.66151698897704% represented as float
+        assert.equal(rex.reserved, 0.6245244254669211)
+        // 62.45244254669211% represented as float
     })
-    test('rex.price_per_ms(1)', async function () {
+    test('rex.price_per(1000)', async function () {
         const rex = await resources.v1.rex.get_state()
         const usage = await resources.getSampledUsage()
-        const price = rex.price_per_ms(usage)
+        const price = rex.price_per(usage, 1000)
 
         const asset = Asset.from(price, '4,EOS')
-        assert.equal(String(asset), '0.0037 EOS')
-        assert.equal(asset.value, 0.0037)
-        assert.equal(Number(asset.units), 37)
+        assert.equal(String(asset), '0.0165 EOS')
+        assert.equal(asset.value, 0.0165)
+        assert.equal(Number(asset.units), 165)
     })
-    test('rex.price_per_ms(10)', async function () {
+    test('rex.price_per(10000)', async function () {
         const rex = await resources.v1.rex.get_state()
         const usage = await resources.getSampledUsage()
-        const price = rex.price_per_ms(usage, 10)
+        const price = rex.price_per(usage, 10000)
 
         const asset = Asset.from(price, '4,EOS')
-        assert.equal(String(asset), '0.0370 EOS')
-        assert.equal(asset.value, 0.037)
-        assert.equal(Number(asset.units), 370)
+        assert.equal(String(asset), '0.1655 EOS')
+        assert.equal(asset.value, 0.1655)
+        assert.equal(Number(asset.units), 1655)
     })
-    test('rex.price_per_ms(1000)', async function () {
+    test('rex.price_per(1000000)', async function () {
         const rex = await resources.v1.rex.get_state()
         const usage = await resources.getSampledUsage()
-        const price = rex.price_per_ms(usage, 1000)
+        const price = rex.price_per(usage, 1000000)
 
         const asset = Asset.from(price, '4,EOS')
-        assert.equal(String(asset), '3.7017 EOS')
-        assert.equal(asset.value, 3.7017)
-        assert.equal(Number(asset.units), 37017)
+        assert.equal(String(asset), '16.5478 EOS')
+        assert.equal(asset.value, 16.5478)
+        assert.equal(Number(asset.units), 165478)
     })
 })
