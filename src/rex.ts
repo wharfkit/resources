@@ -1,6 +1,6 @@
 import {BNPrecision, Resources, SampleUsage} from './'
 
-import {Asset, Name, NameType, Struct, UInt64, UInt8} from '@greymass/eosio'
+import {Asset, Struct, UInt64, UInt8} from '@greymass/eosio'
 
 @Struct.type('rexstate')
 export class REXState extends Struct {
