@@ -162,7 +162,7 @@ suite('[eos] powerup - net calculations', function () {
         const sample = await resources_eos.getSampledUsage()
 
         const frac1000 = powerup.net.frac(sample, 1000000)
-        assert.equal(frac1000, 7796194)
+        assert.equal(frac1000, 8989991)
     })
 })
 

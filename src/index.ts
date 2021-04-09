@@ -53,7 +53,7 @@ export class Resources {
         const byte = UInt128.from(account.net_limit.max.value.mul(BNPrecision))
 
         const cpu_weight = UInt128.from(account.cpu_weight.value)
-        const net_weight = UInt128.from(account.cpu_weight.value)
+        const net_weight = UInt128.from(account.net_weight.value)
 
         return {
             account,
