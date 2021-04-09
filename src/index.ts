@@ -9,6 +9,7 @@ export * from './rex'
 
 interface ResourcesOptions extends APIClientOptions {
     api?: APIClient
+    sampleAccount?: string
     symbol?: string
     url?: string
 }
@@ -26,13 +27,22 @@ export class Resources {
 
     readonly api: APIClient
 
-    // the account to use when sampling usage for REX
+    // the account to use when sampling usage
     sampleAccount = 'b1'
 
     // token precision/symbol
     symbol = '4,EOS'
 
     constructor(options: ResourcesOptions) {
+        // Allow overriding of the sample account name
+        if (options.sampleAccount) {
+            this.sampleAccount = options.sampleAccount
+        }
+        // Allow overriding of the system token symbol
+        if (options.symbol) {
+            this.symbol = options.symbol
+        }
+        // Allow variations on how to specify the API configuration
         if (options.api) {
             this.api = options.api
         } else if (options.url) {
