@@ -199,10 +199,10 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
-"@greymass/eosio@^0.4.0":
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/@greymass/eosio/-/eosio-0.4.0.tgz#ec39ef3b4710b3398d382620ec3f80c2f89124c0"
-  integrity sha512-l3v39H35xW0Juox3dnC2/qpi1g87RbaittgBTDKJTpopy/zdZMe50Cz4VSldKvAu0rx+o9LdRGQVQk23sSWbsg==
+"@greymass/eosio@^0.4.2":
+  version "0.4.2"
+  resolved "https://registry.yarnpkg.com/@greymass/eosio/-/eosio-0.4.2.tgz#df5ee6c26627fab24d7e8f0a4505123d97988d6a"
+  integrity sha512-VJZOqaZaoeYMaojmpQUIUOAt0k667b11ygKgk94RVV0FpfmAcbDS0kq7xJ+LEG1S1vgGXBK2wvbollp6s7HK/Q==
   dependencies:
     bn.js "^4.11.9"
     brorand "^1.1.0"
