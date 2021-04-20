@@ -2,9 +2,11 @@ import {API, APIClient, APIClientOptions, FetchProvider, UInt128} from '@greymas
 import BN from 'bn.js'
 
 import {PowerUpAPI} from './powerup'
+import {RAMAPI} from './ram'
 import {REXAPI} from './rex'
 
 export * from './powerup'
+export * from './ram'
 export * from './rex'
 
 interface ResourcesOptions extends APIClientOptions {
@@ -54,6 +56,7 @@ export class Resources {
 
     v1 = {
         powerup: new PowerUpAPI(this),
+        ram: new RAMAPI(this),
         rex: new REXAPI(this),
     }
 
