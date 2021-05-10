@@ -25,6 +25,13 @@ export class REXState extends Struct {
         return this.total_lent.symbol.precision
     }
 
+    public get value() {
+        return (
+            (Number(this.total_lent.value) + Number(this.total_unlent.value)) /
+            Number(this.total_rex.value)
+        )
+    }
+
     price_per(sample: SampleUsage, unit = 1000): number {
         // Sample token units
         const tokens = Asset.fromUnits(10000, this.symbol)

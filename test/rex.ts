@@ -24,6 +24,11 @@ suite('[eos] rex calculations', function () {
         assert.equal(rex.reserved, 0.6245244254669211)
         // 62.45244254669211% represented as float
     })
+    test('rex.value', async function () {
+        const rex = await resources.v1.rex.get_state()
+        assert.equal(rex.value, 0.00010088553429944951)
+        // 0.00010088553429944951 EOS/REX
+    })
     test('rex.price_per(1000)', async function () {
         const rex = await resources.v1.rex.get_state()
         const usage = await resources.getSampledUsage()
