@@ -37,7 +37,8 @@ export class PowerUpStateResourceNET extends PowerUpStateResource {
     frac = (usage: SampleUsage, bytes: number) => this.frac_by_bytes(usage, bytes)
 
     // Frac generation by kb
-    frac_by_kb = (usage: SampleUsage, bytes: number) => this.frac_by_bytes(usage, bytes * 1000)
+    frac_by_kb = (usage: SampleUsage, kilobytes: number) =>
+        this.frac_by_bytes(usage, kilobytes * 1000)
 
     // Frac generation by bytes
     frac_by_bytes(usage: SampleUsage, bytes: number) {
@@ -51,8 +52,8 @@ export class PowerUpStateResourceNET extends PowerUpStateResource {
         this.price_per_byte(usage, bytes, options)
 
     // Price generation by kb
-    price_per_kb = (usage: SampleUsage, bytes = 1, options?: PowerUpStateOptions): number =>
-        this.price_per_byte(usage, bytes * 1000, options)
+    price_per_kb = (usage: SampleUsage, kilobytes = 1, options?: PowerUpStateOptions): number =>
+        this.price_per_byte(usage, kilobytes * 1000, options)
 
     // Price generation by bytes
     price_per_byte(usage: SampleUsage, bytes = 1000, options?: PowerUpStateOptions): number {

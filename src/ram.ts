@@ -23,8 +23,8 @@ export class RAMState extends ExchangeState {
         return this.get_input(base, quote, bytes)
     }
 
-    public price_per_kb(kb: number): number {
-        return this.price_per(kb * 1000)
+    public price_per_kb(kilobytes: number): number {
+        return this.price_per(kilobytes * 1000)
     }
 
     // Derived from https://github.com/EOSIO/eosio.contracts/blob/f6578c45c83ec60826e6a1eeb9ee71de85abe976/contracts/eosio.system/src/exchange_state.cpp#L96
