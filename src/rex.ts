@@ -26,9 +26,13 @@ export class REXState extends Struct {
     }
 
     public get value() {
+        const factor = 10 ** this.total_unlent.symbol.precision
         return (
-            (Number(this.total_lent.value) + Number(this.total_unlent.value)) /
-            Number(this.total_rex.value)
+            Number(
+                this.total_lent.units
+                    .adding(this.total_unlent.units)
+                    .dividing(this.total_rex.units.dividing(factor))
+            ) / factor
         )
     }
 
