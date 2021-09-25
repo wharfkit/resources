@@ -21,18 +21,18 @@ suite('[eos] ram calculations', function () {
     })
     test('ram.price_per(100)', async function () {
         const ram = await resources.v1.ram.get_state()
-        assert.equal(ram.price_per(100), 0.0033923413973888966)
+        assert.equal(ram.price_per(100), 0.0029972483286048305)
     })
     test('ram.price_per(100000)', async function () {
         const ram = await resources.v1.ram.get_state()
-        assert.equal(ram.price_per(100000), 3.3923434327227646)
+        assert.equal(ram.price_per(100000), 2.997249892194665)
     })
     test('ram.price_per_kb(1)', async function () {
         const ram = await resources.v1.ram.get_state()
         const control = ram.price_per(1000)
         const actual = ram.price_per_kb(1)
-        assert.equal(control, 0.033923414157252266)
-        assert.equal(actual, 0.033923414157252266)
+        assert.equal(control, 0.029972483426912184)
+        assert.equal(actual, 0.029972483426912184)
         assert.equal(actual, control)
     })
 })
