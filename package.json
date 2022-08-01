@@ -1,7 +1,7 @@
 {
     "name": "@greymass/eosio-resources",
     "description": "Library to assist in EOSIO Resource calculations.",
-    "version": "0.8.0",
+    "version": "0.8.1",
     "homepage": "https://github.com/greymass/eosio-resources",
     "license": "BSD-3-Clause",
     "main": "lib/eosio-resources.js",
