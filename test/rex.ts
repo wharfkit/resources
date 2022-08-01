@@ -29,6 +29,12 @@ suite('[eos] rex calculations', function () {
         assert.equal(rex.value, 0.0001)
         // 0.0001 EOS/REX
     })
+    test('rex.exchange', async function () {
+        const rex = await resources.v1.rex.get_state()
+        const amount = Asset.from('493874015.6505 REX')
+        const tokens = rex.exchange(amount)
+        assert.equal(tokens.value, 49935.6501)
+    })
     test('rex.price_per(1000)', async function () {
         const rex = await resources.v1.rex.get_state()
         const usage = await resources.getSampledUsage()

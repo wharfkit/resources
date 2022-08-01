@@ -36,6 +36,13 @@ export class REXState extends Struct {
         )
     }
 
+    exchange(amount: Asset): Asset {
+        return Asset.from(
+            (amount.value * this.total_lendable.value) / this.total_rex.value,
+            this.symbol
+        )
+    }
+
     price_per(sample: SampleUsage, unit = 1000): number {
         // Sample token units
         const tokens = Asset.fromUnits(10000, this.symbol)
