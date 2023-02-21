@@ -26,8 +26,8 @@ suite('[eos] rex calculations', function () {
     })
     test('rex.value', async function () {
         const rex = await resources.v1.rex.get_state()
-        assert.equal(rex.value, 0.0001)
-        // 0.0001 EOS/REX
+        assert.equal(rex.value, 0.00010111009786123536)
+        // 0.00010111009786123536 EOS/REX
     })
     test('rex.exchange', async function () {
         const rex = await resources.v1.rex.get_state()
