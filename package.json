@@ -20,7 +20,7 @@
         "prepare": "make"
     },
     "dependencies": {
-        "@greymass/eosio": "^0.6.1",
+        "@greymass/eosio": "^0.6.9",
         "bn.js": "^4.11.9",
         "tslib": "^2.1.0"
     },
