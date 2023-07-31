@@ -6,7 +6,7 @@ import {readFile as _readFile, writeFile as _writeFile} from 'fs'
 const readFile = promisify(_readFile)
 const writeFile = promisify(_writeFile)
 
-import {APIProvider, Bytes, Checksum160, FetchProvider} from '@greymass/eosio'
+import {APIProvider, Bytes, Checksum160, FetchProvider} from '@wharfkit/antelope'
 
 export class MockProvider implements APIProvider {
     recordProvider = new FetchProvider(this.api, {fetch})

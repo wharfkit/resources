@@ -1,6 +1,6 @@
 import {Resources} from './'
 
-import {Asset, Float64, Struct} from '@greymass/eosio'
+import {Asset, Float64, Struct} from '@wharfkit/antelope'
 
 @Struct.type('connector')
 export class Connector extends Struct {

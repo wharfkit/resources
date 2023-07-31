@@ -1,4 +1,4 @@
-import {API, APIClient, APIClientOptions, FetchProvider, UInt128} from '@greymass/eosio'
+import {API, APIClient, APIClientOptions, FetchProvider, UInt128} from '@wharfkit/antelope'
 import BN from 'bn.js'
 
 import {PowerUpAPI} from './powerup'

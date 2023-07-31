@@ -2,12 +2,12 @@
 
 ## Installation
 
-The `@greymass/eosio-resources` package is distributed as a module on [npm](https://www.npmjs.com/package/eosio-resources).
+The `@wharfkit/resources` package is distributed on [npm](https://www.npmjs.com/package/@wharfkit/resources).
 
 ```
-yarn add @greymass/eosio-resources
+yarn add @wharfkit/resources
 # or
-npm install --save @greymass/eosio-resources
+npm install --save @wharfkit/resources
 ```
 
 ## Usage

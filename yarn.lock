@@ -199,17 +199,6 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
-"@greymass/eosio@^0.6.9":
-  version "0.6.9"
-  resolved "https://registry.yarnpkg.com/@greymass/eosio/-/eosio-0.6.9.tgz#e5475dfb6f1507da6ec2f9f0065e19684e8d4b70"
-  integrity sha512-Xd6X3sesStFQiw3+6+8tD1IauW3WX25GQnHa/zhUqIE1cB23bjzLqn89JDTcyQYKJ4R24L1rERqko/u6p7RizA==
-  dependencies:
-    bn.js "^4.11.9"
-    brorand "^1.1.0"
-    elliptic "^6.5.4"
-    hash.js "^1.0.0"
-    tslib "^2.0.3"
-
 "@istanbuljs/load-nyc-config@^1.0.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@istanbuljs/load-nyc-config/-/load-nyc-config-1.1.0.tgz#fd3db1d59ecf7cf121e80650bb86712f9b55eced"
@@ -358,6 +347,17 @@
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/@ungap/promise-all-settled/-/promise-all-settled-1.1.2.tgz#aa58042711d6e3275dd37dc597e5d31e8c290a44"
   integrity sha512-sL/cEvJWAnClXw0wHk85/2L0G6Sj8UB0Ctc1TEMbKSsmpRosqhwj9gWgFRZSrBr2f9tiXISwNhCPmlfqUqyb9Q==
+
+"@wharfkit/antelope@^0.7.3":
+  version "0.7.3"
+  resolved "https://registry.yarnpkg.com/@wharfkit/antelope/-/antelope-0.7.3.tgz#408f6c587f4f5990d4b55596c10be2e976798641"
+  integrity sha512-pyUmuXUpLQh1RVpJVIcbVUHTwV/DQ+MI0nlfWDBHIICdYf6XidZtQmaHB7JEXiFzlS8T7S9Xc5VOTOQU8dnl3Q==
+  dependencies:
+    bn.js "^4.11.9"
+    brorand "^1.1.0"
+    elliptic "^6.5.4"
+    hash.js "^1.0.0"
+    tslib "^2.0.3"
 
 acorn-jsx@^5.3.1:
   version "5.3.1"
@@ -2490,9 +2490,9 @@ tslib@^1.8.1:
   integrity sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==
 
 tslib@^2.0.3:
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.4.0.tgz#7cecaa7f073ce680a05847aa77be941098f36dc3"
-  integrity sha512-d6xOpEDfsi2CZVlPQzGeux8XMwLT9hssAsaPYExaQMuYskwb+x1x7J371tWlbBdWHroy99KnVB6qIkUbs5X3UQ==
+  version "2.6.1"
+  resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.6.1.tgz#fd8c9a0ff42590b25703c0acb3de3d3f4ede0410"
+  integrity sha512-t0hLfiEKfMUoqhG+U1oid7Pva4bbDPHYfJNiB7BiIjRkj1pyC++4N3huJfqY6aRH6VTB0rvtzQwjM4K6qpfOig==
 
 tslib@^2.1.0:
   version "2.1.0"

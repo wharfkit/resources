@@ -8,7 +8,7 @@ import {
     UInt32,
     UInt64,
     UInt8,
-} from '@greymass/eosio'
+} from '@wharfkit/antelope'
 
 import BN from 'bn.js'
 import {PowerUpStateOptions} from './options'

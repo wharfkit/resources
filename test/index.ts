@@ -2,7 +2,7 @@ import 'mocha'
 import {strict as assert} from 'assert'
 import fetch from 'node-fetch'
 
-import {Asset, APIClient} from '@greymass/eosio'
+import {Asset, APIClient} from '@wharfkit/antelope'
 
 import {PowerUpState, Resources} from '../src'
 

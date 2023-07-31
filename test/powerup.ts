@@ -3,7 +3,7 @@ import {strict as assert} from 'assert'
 import {join as joinPath} from 'path'
 import fetch from 'node-fetch'
 
-import {APIClient, Asset} from '@greymass/eosio'
+import {APIClient, Asset} from '@wharfkit/antelope'
 import {MockProvider} from './utils/mock-provider'
 
 import {PowerUpState, Resources} from '../src'

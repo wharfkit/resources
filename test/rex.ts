@@ -2,7 +2,7 @@ import 'mocha'
 import {strict as assert} from 'assert'
 import {join as joinPath} from 'path'
 
-import {APIClient, Asset} from '@greymass/eosio'
+import {APIClient, Asset} from '@wharfkit/antelope'
 import {MockProvider} from './utils/mock-provider'
 
 import {Resources, REXState} from '../src'

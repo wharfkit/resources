@@ -1,4 +1,4 @@
-import {Struct, UInt128} from '@greymass/eosio'
+import {Struct, UInt128} from '@wharfkit/antelope'
 
 import {BNPrecision, SampleUsage} from '..'
 import {PowerUpStateResource} from './abstract'

@@ -1,12 +1,12 @@
 {
-    "name": "@greymass/eosio-resources",
-    "description": "Library to assist in EOSIO Resource calculations.",
-    "version": "0.9.0",
-    "homepage": "https://github.com/greymass/eosio-resources",
+    "name": "@wharfkit/resources",
+    "description": "Library to assist in Antelope-blockchain resource calculations.",
+    "version": "1.0.0",
+    "homepage": "https://github.com/wharfkit/resources",
     "license": "BSD-3-Clause",
-    "main": "lib/eosio-resources.js",
-    "module": "lib/eosio-resources.m.js",
-    "types": "lib/eosio-resources.d.ts",
+    "main": "lib/wharfkit-resources.js",
+    "module": "lib/wharfkit-resources.m.js",
+    "types": "lib/wharfkit-resources.d.ts",
     "browser": {
         "buffer": false,
         "crypto": false
@@ -20,7 +20,7 @@
         "prepare": "make"
     },
     "dependencies": {
-        "@greymass/eosio": "^0.6.9",
+        "@wharfkit/antelope": "^0.7.3",
         "bn.js": "^4.11.9",
         "tslib": "^2.1.0"
     },

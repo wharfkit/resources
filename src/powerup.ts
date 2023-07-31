@@ -1,4 +1,4 @@
-import {Asset, Struct, UInt32, UInt8} from '@greymass/eosio'
+import {Asset, Struct, UInt32, UInt8} from '@wharfkit/antelope'
 
 import {Resources} from '.'
 import {PowerUpStateResourceCPU} from './powerup/cpu'

@@ -1,4 +1,4 @@
-import {TimePointType, UInt64} from '@greymass/eosio'
+import {TimePointType, UInt64} from '@wharfkit/antelope'
 
 export interface PowerUpStateOptions {
     // timestamp to base adjusted_utilization off
