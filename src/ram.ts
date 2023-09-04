@@ -1,6 +1,6 @@
 import {Resources} from './'
 
-import {Asset, Float64, Struct} from '@wharfkit/antelope'
+import {Asset, Float64, Int64, Struct} from '@wharfkit/antelope'
 
 @Struct.type('connector')
 export class Connector extends Struct {
@@ -17,23 +17,23 @@ export class ExchangeState extends Struct {
 
 @Struct.type('ramstate')
 export class RAMState extends ExchangeState {
-    public price_per(bytes: number): number {
-        const base = this.base.balance.units.toNumber()
-        const quote = this.quote.balance.value
-        return this.get_input(base, quote, bytes)
+    public price_per(bytes: number): Asset {
+        const base = this.base.balance.units
+        const quote = this.quote.balance.units
+        return Asset.fromUnits(
+            this.get_input(base, quote, Int64.from(bytes)),
+            this.quote.balance.symbol
+        )
     }
 
-    public price_per_kb(kilobytes: number): number {
+    public price_per_kb(kilobytes: number): Asset {
         return this.price_per(kilobytes * 1000)
     }
 
     // Derived from https://github.com/EOSIO/eosio.contracts/blob/f6578c45c83ec60826e6a1eeb9ee71de85abe976/contracts/eosio.system/src/exchange_state.cpp#L96
-    public get_input(base: number, quote: number, value: number): number {
-        const result = (quote * value) / (base - value)
-        if (result < 0) {
-            return 0
-        }
-        return result
+    public get_input(base: Int64, quote: Int64, value: Int64): Int64 {
+        // (quote * value) / (base - value), using 'ceil' to round up
+        return quote.multiplying(value).dividing(base.subtracting(value), 'ceil')
     }
 }
 
