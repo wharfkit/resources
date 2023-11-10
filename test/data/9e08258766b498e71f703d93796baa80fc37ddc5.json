@@ -1,0 +1,18 @@
+{
+    "request": {
+        "path": "https://eos.greymass.com/v1/chain/get_table_rows",
+        "params": {
+            "method": "POST",
+            "body": "{\"code\":\"eosio\",\"scope\":\"eosio\",\"table\":\"rammarket\",\"key_type\":\"name\",\"json\":false}"
+        }
+    },
+    "status": 200,
+    "json": {
+        "rows": [
+            "00407a10f35a00000452414d434f5245ffcd4f55500000000052414d00000000000000000000e03ffce056a10c00000004454f5300000000000000000000e03f"
+        ],
+        "more": false,
+        "next_key": ""
+    },
+    "text": "{\"rows\":[\"00407a10f35a00000452414d434f5245ffcd4f55500000000052414d00000000000000000000e03ffce056a10c00000004454f5300000000000000000000e03f\"],\"more\":false,\"next_key\":\"\"}"
+}

@@ -6,13 +6,13 @@ lib: ${SRC_FILES} package.json tsconfig.json node_modules rollup.config.js
 
 .PHONY: test
 test: node_modules
-	@TS_NODE_PROJECT='./test/tsconfig.json' ${BIN}/mocha \
+	@TS_NODE_PROJECT='./test/tsconfig.json' MOCK_DIR=./test/data ${BIN}/mocha  \
 		-u tdd -r ts-node/register --extension ts test/*.ts --grep '$(grep)'
 
 .PHONY: coverage
 coverage: node_modules
 	@TS_NODE_PROJECT='./test/tsconfig.json' ${BIN}/nyc --reporter=html \
-		${BIN}/mocha -u tdd -r ts-node/register --extension ts test/*.ts \
+		${BIN}/mocha MOCK_DIR=./test/data -u tdd -r ts-node/register --extension ts test/*.ts \
 		-R nyan && open coverage/index.html
 
 .PHONY: lint
@@ -21,7 +21,7 @@ lint: node_modules
 
 .PHONY: ci-test
 ci-test: node_modules
-	@TS_NODE_PROJECT='./test/tsconfig.json' ${BIN}/nyc --reporter=text \
+	@TS_NODE_PROJECT='./test/tsconfig.json' MOCK_DIR=./test/data ${BIN}/nyc --reporter=text \
 		${BIN}/mocha -u tdd -r ts-node/register --extension ts test/*.ts -R list
 
 .PHONY: ci-lint

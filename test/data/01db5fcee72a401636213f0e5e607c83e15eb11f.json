@@ -1,0 +1,32 @@
+{
+    "request": {
+        "path": "https://eos.greymass.com/v1/chain/get_info",
+        "params": {
+            "method": "GET"
+        }
+    },
+    "status": 200,
+    "json": {
+        "server_version": "43873e82",
+        "chain_id": "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
+        "head_block_num": 340895511,
+        "last_irreversible_block_num": 340895176,
+        "last_irreversible_block_id": "1451a5c88df252644e99a33ca328c3bd8d5e81361b9524b10a14b6901f6a2f55",
+        "head_block_id": "1451a717d660644b1e45760e39f9cfab50a983bb926940325b6f543987ca7366",
+        "head_block_time": "2023-11-10T17:36:11.000",
+        "head_block_producer": "bitfinexeos1",
+        "virtual_block_cpu_limit": 200000,
+        "virtual_block_net_limit": 1048576000,
+        "block_cpu_limit": 200000,
+        "block_net_limit": 1048576,
+        "server_version_string": "v3.2.3-hotfix",
+        "fork_db_head_block_num": 340895511,
+        "fork_db_head_block_id": "1451a717d660644b1e45760e39f9cfab50a983bb926940325b6f543987ca7366",
+        "server_full_version_string": "v3.2.3-hotfix-43873e822160be5e5f364fd867e3c7d27162cd0c-dirty",
+        "total_cpu_weight": "383322901692810",
+        "total_net_weight": "96096575077807",
+        "earliest_available_block_num": 340722102,
+        "last_irreversible_block_time": "2023-11-10T17:33:23.500"
+    },
+    "text": "{\"server_version\":\"43873e82\",\"chain_id\":\"aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906\",\"head_block_num\":340895511,\"last_irreversible_block_num\":340895176,\"last_irreversible_block_id\":\"1451a5c88df252644e99a33ca328c3bd8d5e81361b9524b10a14b6901f6a2f55\",\"head_block_id\":\"1451a717d660644b1e45760e39f9cfab50a983bb926940325b6f543987ca7366\",\"head_block_time\":\"2023-11-10T17:36:11.000\",\"head_block_producer\":\"bitfinexeos1\",\"virtual_block_cpu_limit\":200000,\"virtual_block_net_limit\":1048576000,\"block_cpu_limit\":200000,\"block_net_limit\":1048576,\"server_version_string\":\"v3.2.3-hotfix\",\"fork_db_head_block_num\":340895511,\"fork_db_head_block_id\":\"1451a717d660644b1e45760e39f9cfab50a983bb926940325b6f543987ca7366\",\"server_full_version_string\":\"v3.2.3-hotfix-43873e822160be5e5f364fd867e3c7d27162cd0c-dirty\",\"total_cpu_weight\":\"383322901692810\",\"total_net_weight\":\"96096575077807\",\"earliest_available_block_num\":340722102,\"last_irreversible_block_time\":\"2023-11-10T17:33:23.500\"}"
+}
