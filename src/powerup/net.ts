@@ -68,7 +68,7 @@ export class PowerUpStateResourceNET extends PowerUpStateResource {
         const fee = this.fee(utilization_increase, adjusted_utilization)
 
         // Force the fee up to the next highest value of precision
-        const precision = Math.pow(10, 4)
+        const precision = Math.pow(10, this.max_price.symbol.precision)
         const value = Math.ceil(fee * precision) / precision
 
         // Return the modified fee

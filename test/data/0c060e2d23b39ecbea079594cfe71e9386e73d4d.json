@@ -1,0 +1,28 @@
+{
+    "request": {
+        "path": "http://127.0.0.1:8888/v1/chain/get_account",
+        "params": {
+            "method": "POST",
+            "body": "{\"account_name\":\"b1\"}"
+        }
+    },
+    "status": 500,
+    "json": {
+        "code": 500,
+        "message": "Internal Service Error",
+        "error": {
+            "code": 0,
+            "name": "exception",
+            "what": "unspecified",
+            "details": [
+                {
+                    "message": "unknown key (boost::tuples::tuple<bool, eosio::chain::name, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type>): (0 b1)",
+                    "file": "http_plugin.cpp",
+                    "line_number": 955,
+                    "method": "handle_exception"
+                }
+            ]
+        }
+    },
+    "text": "{\"code\":500,\"message\":\"Internal Service Error\",\"error\":{\"code\":0,\"name\":\"exception\",\"what\":\"unspecified\",\"details\":[{\"message\":\"unknown key (boost::tuples::tuple<bool, eosio::chain::name, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type, boost::tuples::null_type>): (0 b1)\",\"file\":\"http_plugin.cpp\",\"line_number\":955,\"method\":\"handle_exception\"}]}}"
+}

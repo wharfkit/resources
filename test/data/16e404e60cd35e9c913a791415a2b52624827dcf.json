@@ -1,0 +1,138 @@
+{
+    "request": {
+        "path": "http://127.0.0.1:8888/v1/chain/get_account",
+        "params": {
+            "method": "POST",
+            "body": "{\"account_name\":\"boost.wax\"}"
+        }
+    },
+    "status": 200,
+    "json": {
+        "account_name": "boost.wax",
+        "head_block_num": 205984,
+        "head_block_time": "2023-11-21T15:46:41.500",
+        "privileged": false,
+        "last_code_update": "2023-11-20T11:10:15.500",
+        "created": "2023-11-20T11:10:12.500",
+        "core_liquid_balance": "100000.00000000 WAX",
+        "ram_quota": "10425432623",
+        "net_weight": 1000000000,
+        "cpu_weight": 1000000000,
+        "net_limit": {
+            "used": 23908,
+            "available": 1044064080,
+            "max": 1044087988
+        },
+        "cpu_limit": {
+            "used": 9113,
+            "available": 70058946,
+            "max": 70068059
+        },
+        "ram_usage": 577170,
+        "permissions": [
+            {
+                "perm_name": "active",
+                "parent": "owner",
+                "required_auth": {
+                    "threshold": 1,
+                    "keys": [
+                        {
+                            "key": "EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV",
+                            "weight": 1
+                        }
+                    ],
+                    "accounts": [
+                        {
+                            "permission": {
+                                "actor": "boost.wax",
+                                "permission": "eosio.code"
+                            },
+                            "weight": 1
+                        }
+                    ],
+                    "waits": []
+                },
+                "linked_actions": []
+            },
+            {
+                "perm_name": "deploy",
+                "parent": "active",
+                "required_auth": {
+                    "threshold": 1,
+                    "keys": [
+                        {
+                            "key": "EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV",
+                            "weight": 1
+                        }
+                    ],
+                    "accounts": [],
+                    "waits": []
+                },
+                "linked_actions": [
+                    {
+                        "account": "eosio",
+                        "action": "setcode"
+                    },
+                    {
+                        "account": "eosio",
+                        "action": "setabi"
+                    }
+                ]
+            },
+            {
+                "perm_name": "owner",
+                "parent": "",
+                "required_auth": {
+                    "threshold": 1,
+                    "keys": [
+                        {
+                            "key": "EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV",
+                            "weight": 1
+                        }
+                    ],
+                    "accounts": [],
+                    "waits": []
+                },
+                "linked_actions": []
+            },
+            {
+                "perm_name": "paybw",
+                "parent": "active",
+                "required_auth": {
+                    "threshold": 1,
+                    "keys": [
+                        {
+                            "key": "EOS8cFt6PzBL79kp9vPwWoX8V6cjwgShbfUsyisiZ1M8QaFgZtep6",
+                            "weight": 1
+                        }
+                    ],
+                    "accounts": [],
+                    "waits": []
+                },
+                "linked_actions": [
+                    {
+                        "account": "boost.wax",
+                        "action": "noop"
+                    }
+                ]
+            }
+        ],
+        "total_resources": {
+            "owner": "boost.wax",
+            "net_weight": "10.00000000 WAX",
+            "cpu_weight": "10.00000000 WAX",
+            "ram_bytes": "10425431223"
+        },
+        "self_delegated_bandwidth": null,
+        "refund_request": null,
+        "voter_info": null,
+        "rex_info": null,
+        "subjective_cpu_bill_limit": {
+            "used": 0,
+            "available": 0,
+            "max": 0
+        },
+        "eosio_any_linked_actions": []
+    },
+    "text": "{\"account_name\":\"boost.wax\",\"head_block_num\":205984,\"head_block_time\":\"2023-11-21T15:46:41.500\",\"privileged\":false,\"last_code_update\":\"2023-11-20T11:10:15.500\",\"created\":\"2023-11-20T11:10:12.500\",\"core_liquid_balance\":\"100000.00000000 WAX\",\"ram_quota\":\"10425432623\",\"net_weight\":1000000000,\"cpu_weight\":1000000000,\"net_limit\":{\"used\":23908,\"available\":1044064080,\"max\":1044087988},\"cpu_limit\":{\"used\":9113,\"available\":70058946,\"max\":70068059},\"ram_usage\":577170,\"permissions\":[{\"perm_name\":\"active\",\"parent\":\"owner\",\"required_auth\":{\"threshold\":1,\"keys\":[{\"key\":\"EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV\",\"weight\":1}],\"accounts\":[{\"permission\":{\"actor\":\"boost.wax\",\"permission\":\"eosio.code\"},\"weight\":1}],\"waits\":[]},\"linked_actions\":[]},{\"perm_name\":\"deploy\",\"parent\":\"active\",\"required_auth\":{\"threshold\":1,\"keys\":[{\"key\":\"EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV\",\"weight\":1}],\"accounts\":[],\"waits\":[]},\"linked_actions\":[{\"account\":\"eosio\",\"action\":\"setcode\"},{\"account\":\"eosio\",\"action\":\"setabi\"}]},{\"perm_name\":\"owner\",\"parent\":\"\",\"required_auth\":{\"threshold\":1,\"keys\":[{\"key\":\"EOS6MRyAjQq8ud7hVNYcfnVPJqcVpscN5So8BhtHuGYqET5GDW5CV\",\"weight\":1}],\"accounts\":[],\"waits\":[]},\"linked_actions\":[]},{\"perm_name\":\"paybw\",\"parent\":\"active\",\"required_auth\":{\"threshold\":1,\"keys\":[{\"key\":\"EOS8cFt6PzBL79kp9vPwWoX8V6cjwgShbfUsyisiZ1M8QaFgZtep6\",\"weight\":1}],\"accounts\":[],\"waits\":[]},\"linked_actions\":[{\"account\":\"boost.wax\",\"action\":\"noop\"}]}],\"total_resources\":{\"owner\":\"boost.wax\",\"net_weight\":\"10.00000000 WAX\",\"cpu_weight\":\"10.00000000 WAX\",\"ram_bytes\":\"10425431223\"},\"self_delegated_bandwidth\":null,\"refund_request\":null,\"voter_info\":null,\"rex_info\":null,\"subjective_cpu_bill_limit\":{\"used\":0,\"available\":0,\"max\":0},\"eosio_any_linked_actions\":[]}"
+}
