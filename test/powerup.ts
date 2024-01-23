@@ -14,8 +14,8 @@ const resources_jungle = new Resources({
     api: makeClient('https://jungle4.greymass.com'),
 })
 
-const resources_local = new Resources({
-    api: makeClient('http://127.0.0.1:8888'),
+const resources_wax = new Resources({
+    api: makeClient('https://wax.greymass.com'),
     sampleAccount: 'boost.wax'
 })
 
@@ -44,12 +44,12 @@ suite('[eos] powerup - cpu calculations', function () {
     test('powerup.cpu.us_to_weight', async function () {
         const powerup = await resources_eos.v1.powerup.get_state()
         const sample = await resources_eos.getSampledUsage()
-        assert.equal(powerup.cpu.us_to_weight(sample.cpu, 35868), 403011235)
+        assert.equal(powerup.cpu.us_to_weight(sample.cpu, 35868), 397914355)
     })
     test('powerup.cpu.weight_to_us', async function () {
         const powerup = await resources_eos.v1.powerup.get_state()
         const sample = await resources_eos.getSampledUsage()
-        assert.equal(powerup.cpu.weight_to_us(sample.cpu, 12930064), 1151)
+        assert.equal(powerup.cpu.weight_to_us(sample.cpu, 12930064), 1166)
     })
     test('powerup.cpu.allocated', async function () {
         const powerup = await resources_eos.v1.powerup.get_state()
@@ -67,7 +67,7 @@ suite('[eos] powerup - cpu calculations', function () {
         const powerup = await resources_eos.v1.powerup.get_state()
         const sample = await resources_eos.getSampledUsage()
         const price = powerup.cpu.price_per_ms(sample, 60, this.testFixture)
-        assert.equal(price, 0.0146)
+        assert.equal(price, 0.0144)
     })
     test('powerup.cpu.price_per_us(1)', async function () {
         const powerup = await resources_eos.v1.powerup.get_state()
@@ -103,22 +103,22 @@ suite('[eos] powerup - cpu calculations', function () {
         const sample = await resources_eos.getSampledUsage()
 
         const price = powerup.cpu.price_per_ms(sample, 1000, this.testFixture)
-        assert.equal(price, 0.2421)
+        assert.equal(price, 0.239)
 
         const asset = Asset.from(price, '4,EOS')
-        assert.equal(String(asset), '0.2421 EOS')
-        assert.equal(asset.value, 0.2421)
-        assert.equal(Number(asset.units), 2421)
+        assert.equal(String(asset), '0.2390 EOS')
+        assert.equal(asset.value, 0.239)
+        assert.equal(Number(asset.units), 2390)
     })
     test('powerup.cpu.frac()', async function () {
         const powerup = await resources_eos.v1.powerup.get_state()
         const sample = await resources_eos.getSampledUsage()
 
         const frac1 = powerup.cpu.frac(sample, 100)
-        assert.equal(frac1, 2942764)
+        assert.equal(frac1, 2905547)
 
         const frac1000 = powerup.cpu.frac(sample, 1000000)
-        assert.equal(frac1000, 29427660509)
+        assert.equal(frac1000, 29055489074)
     })
 })
 
@@ -192,127 +192,126 @@ suite('[jungle] powerup - cpu calculations', function () {
         const price_us = powerup.cpu.price_per_us(sample, 1000000, this.testFixture)
         const price_ms = powerup.cpu.price_per_ms(sample, 1000, this.testFixture)
         assert.equal(price_us, price_ms)
-        assert.equal(price_ms, 0.466)
+        assert.equal(price_ms, 0.4601)
     })
     test('powerup.cpu.price_per_ms(1000)', async function () {
         const powerup = await resources_jungle.v1.powerup.get_state()
         const sample = await resources_eos.getSampledUsage()
 
         const price = powerup.cpu.price_per_ms(sample, 1000, this.testFixture)
-        assert.equal(price, 0.466)
+        assert.equal(price, 0.4601)
 
         const asset = Asset.from(price, '4,EOS')
-        assert.equal(String(asset), '0.4660 EOS')
-        assert.equal(asset.value, 0.466)
-        assert.equal(Number(asset.units), 4660)
+        assert.equal(String(asset), '0.4601 EOS')
+        assert.equal(asset.value, 0.4601)
+        assert.equal(Number(asset.units), 4601)
     })
     test('powerup.cpu.price_per_ms(1000000)', async function () {
         const powerup = await resources_jungle.v1.powerup.get_state()
         const sample = await resources_eos.getSampledUsage()
 
         const price = powerup.cpu.price_per_ms(sample, 1000000, this.testFixture)
-        assert.equal(price, 932.4653)
+        assert.equal(price, 914.8417)
 
         const asset = Asset.from(price, '4,EOS')
-        assert.equal(String(asset), '932.4653 EOS')
-        assert.equal(asset.value, 932.4653)
-        assert.equal(Number(asset.units), 9324653)
+        assert.equal(String(asset), '914.8417 EOS')
+        assert.equal(asset.value, 914.8417)
+        assert.equal(Number(asset.units), 9148417)
     })
 })
 
-suite('[local] powerup - cpu calculations', function () {
+suite('[wax] powerup - cpu calculations', function () {
     this.slow(200)
     setup(async function () {
-        const info = await resources_local.api.v1.chain.get_info()
+        const info = await resources_wax.api.v1.chain.get_info()
         this.testFixture = Object.assign({}, defaultFixture, {
             virtual_block_cpu_limit: info.virtual_block_cpu_limit,
             virtual_block_net_limit: info.virtual_block_net_limit,
         })
     })
     test('powerup.cpu.allocated', async function () {
-        const powerup = await resources_local.v1.powerup.get_state()
+        const powerup = await resources_wax.v1.powerup.get_state()
 
-        assert.equal(powerup.cpu.allocated, 0.99)
+        assert.equal(powerup.cpu.allocated, 0.9890078589830127)
         // 99% represented as float
     })
     test('powerup.cpu.reserved', async function () {
-        const powerup = await resources_local.v1.powerup.get_state()
+        const powerup = await resources_wax.v1.powerup.get_state()
 
-        assert.equal(powerup.cpu.reserved, 0.000007257176013718749)
-        // 0.032428358627099564% represented as float
+        assert.equal(powerup.cpu.reserved, 0.000005473139080385654)
     })
     test('powerup.cpu.price_per_us(1000000)', async function () {
-        const powerup = await resources_local.v1.powerup.get_state()
-        const sample = await resources_eos.getSampledUsage()
+        const powerup = await resources_wax.v1.powerup.get_state()
+        const sample = await resources_wax.getSampledUsage()
 
         const price_us = powerup.cpu.price_per_us(sample, 1000000, this.testFixture)
         const price_ms = powerup.cpu.price_per_ms(sample, 1000, this.testFixture)
         assert.equal(price_us, price_ms)
-        assert.equal(price_ms, 0.19945642)
+        assert.equal(price_ms, 17.53764085)
     })
     test('powerup.cpu.price_per_ms(1000)', async function () {
-        const powerup = await resources_local.v1.powerup.get_state()
-        const sample = await resources_eos.getSampledUsage()
+        const powerup = await resources_wax.v1.powerup.get_state()
+        const sample = await resources_wax.getSampledUsage()
 
         const price = powerup.cpu.price_per_ms(sample, 1000, this.testFixture)
-        assert.equal(price, 0.19945642)
+        assert.equal(price, 17.53764085)
 
         const asset = Asset.from(price, '8,WAX')
-        assert.equal(String(asset), '0.19945642 WAX')
-        assert.equal(asset.value, 0.19945642)
-        assert.equal(Number(asset.units), 19945642)
+        assert.equal(String(asset), '17.53764085 WAX')
+        assert.equal(asset.value, 17.53764085)
+        assert.equal(Number(asset.units), 1753764085)
     })
     test('powerup.cpu.price_per_ms(1000000)', async function () {
-        const powerup = await resources_local.v1.powerup.get_state()
-        const sample = await resources_local.getSampledUsage()
+        const powerup = await resources_wax.v1.powerup.get_state()
+        const sample = await resources_wax.getSampledUsage()
 
         const price = powerup.cpu.price_per_ms(sample, 1000000, this.testFixture)
-        assert.equal(price, 0.2533747)
+        assert.equal(price, 498962.40065742)
 
         const asset = Asset.from(price, '8,WAX')
-        assert.equal(String(asset), '0.25337470 WAX')
-        assert.equal(asset.value, 0.2533747)
-        assert.equal(Number(asset.units), 25337470)
+        assert.equal(String(asset), '498962.40065742 WAX')
+        assert.equal(asset.value, 498962.40065742)
+        assert.equal(Number(asset.units), 49896240065742)
     })
 })
 
-suite('[local] powerup - net calculations', function () {
+suite('[wax] powerup - net calculations', function () {
     this.slow(200)
     setup(async function () {
-        const info = await resources_local.api.v1.chain.get_info()
+        const info = await resources_wax.api.v1.chain.get_info()
         this.testFixture = Object.assign({}, defaultFixture, {
             virtual_block_cpu_limit: info.virtual_block_cpu_limit,
             virtual_block_net_limit: info.virtual_block_net_limit,
         })
     })
     test('powerup.net.allocated', async function () {
-        const powerup = await resources_local.v1.powerup.get_state()
+        const powerup = await resources_wax.v1.powerup.get_state()
 
-        assert.equal(powerup.net.allocated, 0.99)
+        assert.equal(powerup.net.allocated, 0.9890078589830127)
         // 99% represented as float
     })
     test('powerup.net.reserved', async function () {
-        const powerup = await resources_local.v1.powerup.get_state()
+        const powerup = await resources_wax.v1.powerup.get_state()
 
-        assert.equal(powerup.net.reserved, 0.0000001499001650654894)
+        assert.equal(powerup.net.reserved, 0.0000010629515032355908)
     })
     test('powerup.net.price_per_kb(1000000000000)', async function () {
-        const powerup = await resources_local.v1.powerup.get_state()
-        const sample = await resources_local.getSampledUsage()
+        const powerup = await resources_wax.v1.powerup.get_state()
+        const sample = await resources_wax.getSampledUsage()
 
         const price = powerup.net.price_per_kb(sample, 1000, this.testFixture)
-        assert.equal(price, 0.00004831)
+        assert.equal(price, 0.00451099)
 
         const asset = Asset.from(price, '8,WAX')
-        assert.equal(String(asset), '0.00004831 WAX')
-        assert.equal(asset.value, 0.00004831)
-        assert.equal(Number(asset.units), 4831)
+        assert.equal(String(asset), '0.00451099 WAX')
+        assert.equal(asset.value, 0.00451099)
+        assert.equal(Number(asset.units), 451099)
     })
     test('powerup.net.frac()', async function () {
-        const powerup = await resources_local.v1.powerup.get_state()
-        const sample = await resources_local.getSampledUsage()
+        const powerup = await resources_wax.v1.powerup.get_state()
+        const sample = await resources_wax.getSampledUsage()
 
         const frac1000 = powerup.net.frac(sample, 1000000)
-        assert.equal(frac1000, 5520719)
+        assert.equal(frac1000, 515521337)
     })
 })
