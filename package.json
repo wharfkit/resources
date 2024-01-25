@@ -22,6 +22,7 @@
     "dependencies": {
         "@wharfkit/antelope": "^1.0.0",
         "bn.js": "^4.11.9",
+        "js-big-decimal": "^2.0.7",
         "tslib": "^2.1.0"
     },
     "devDependencies": {
