@@ -3,6 +3,7 @@ import {Struct, UInt128} from '@wharfkit/antelope'
 import {BNPrecision, SampleUsage} from '..'
 import {PowerUpStateResource} from './abstract'
 import {PowerUpStateOptions} from './options'
+import bigDecimal from 'js-big-decimal'
 
 @Struct.type('powerupstateresourcecpu')
 export class PowerUpStateResourceCPU extends PowerUpStateResource {
@@ -42,7 +43,9 @@ export class PowerUpStateResourceCPU extends PowerUpStateResource {
     // Frac generation by μs (microseconds)
     frac_by_us(usage: SampleUsage, us: number) {
         const {weight} = this.cast()
-        const frac = this.us_to_weight(usage.cpu, us) / weight
+        const frac = Number(
+            new bigDecimal(this.us_to_weight(usage.cpu, us)).divide(weight).getValue()
+        )
         return Math.floor(frac * Math.pow(10, 15))
     }
 
