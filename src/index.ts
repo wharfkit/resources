@@ -22,7 +22,7 @@ export interface SampleUsage {
     net: UInt128
 }
 
-export const BNPrecision = new BN(100 * 1000 * 1000)
+export const BNPrecision = new BN(1000 * 1000)
 
 export class Resources {
     static __className = 'Resources'
