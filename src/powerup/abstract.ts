@@ -43,9 +43,7 @@ export abstract class PowerUpStateResource extends Struct {
 
     // Get the current percentage of reserved units
     public get reserved() {
-        return new bigDecimal(String(this.utilization))
-            .divide(new bigDecimal(String(this.weight)))
-            .getValue()
+        return new BN(String(this.utilization)) / new BN(String(this.weight))
     }
 
     // Get the symbol definition for the token
@@ -61,7 +59,7 @@ export abstract class PowerUpStateResource extends Struct {
             exponent: Number(this.exponent),
             utilization: Number(this.utilization),
             utilization_timestamp: Number(this.utilization_timestamp.value),
-            weight: new bigDecimal(String(this.weight)),
+            weight: new BN(String(this.weight)),
             weight_ratio: Number(this.weight_ratio),
         }
     }
@@ -85,7 +83,7 @@ export abstract class PowerUpStateResource extends Struct {
         if (new_exponent <= 0.0) {
             return max_price
         } else {
-            const util_weight = Number(new bigDecimal(utilization).divide(weight).getValue())
+            const util_weight = new BN(utilization) / weight
             price += (max_price - min_price) * Math.pow(util_weight, new_exponent)
         }
         return price
@@ -97,8 +95,8 @@ export abstract class PowerUpStateResource extends Struct {
         const max_price: number = this.max_price.value
         const min_price: number = this.min_price.value
         const coefficient = (max_price - min_price) / exponent
-        const start_u = Number(new bigDecimal(start_utilization).divide(weight).getValue())
-        const end_u = Number(new bigDecimal(end_utilization).divide(weight).getValue())
+        const start_u = new BN(start_utilization) / weight
+        const end_u = new BN(end_utilization) / weight
         const delta =
             min_price * end_u -
             min_price * start_u +
@@ -119,7 +117,7 @@ export abstract class PowerUpStateResource extends Struct {
             const min = Math.min(utilization_increase, adjusted_utilization - start_utilization)
             fee += Number(
                 new bigDecimal(this.price_function(adjusted_utilization) * min)
-                    .divide(weight)
+                    .divide(new bigDecimal(weight.toString()))
                     .getValue()
             )
             start_utilization = adjusted_utilization
