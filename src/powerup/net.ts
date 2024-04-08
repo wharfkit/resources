@@ -3,6 +3,7 @@ import {Struct, UInt128} from '@wharfkit/antelope'
 import {BNPrecision, SampleUsage} from '..'
 import {PowerUpStateResource} from './abstract'
 import {PowerUpStateOptions} from './options'
+import BN from 'bn.js'
 
 @Struct.type('powerupstateresourcenet')
 export class PowerUpStateResourceNET extends PowerUpStateResource {
@@ -43,7 +44,7 @@ export class PowerUpStateResourceNET extends PowerUpStateResource {
     // Frac generation by bytes
     frac_by_bytes(usage: SampleUsage, bytes: number) {
         const {weight} = this.cast()
-        const frac = this.bytes_to_weight(usage.net, bytes) / weight
+        const frac = new BN(this.bytes_to_weight(usage.net, bytes)) / weight
         return Math.floor(frac * Math.pow(10, 15))
     }
 

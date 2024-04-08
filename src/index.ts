@@ -80,7 +80,7 @@ function divCeil(num: BN, den: BN): UInt128 {
     let v: BN = num.div(den)
     const zero = new BN(0)
     const one = new BN(1)
-    if (num.mod(den).gt(zero)) {
+    if (num.mod(den).gt(zero) && v.gt(one)) {
         v = v.sub(one)
     }
     return UInt128.from(v)
