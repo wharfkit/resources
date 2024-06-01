@@ -30,7 +30,7 @@ export class Resources {
     readonly api: APIClient
 
     // the account to use when sampling usage
-    sampleAccount = 'b1'
+    sampleAccount = 'greymassfuel'
 
     // token precision/symbol
     symbol = '4,EOS'
