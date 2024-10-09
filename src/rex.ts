@@ -1,6 +1,6 @@
 import {BNPrecision, Resources, SampleUsage} from './'
 
-import {Asset, Struct, UInt64, UInt8} from '@wharfkit/antelope'
+import {Asset, Struct, UInt128, UInt64, UInt8} from '@wharfkit/antelope'
 
 @Struct.type('rexstate')
 export class REXState extends Struct {
@@ -39,7 +39,23 @@ export class REXState extends Struct {
         )
     }
 
-    price_per(sample: SampleUsage, unit = 1000): number {
+    cpu_price_per_ms(sample: SampleUsage, ms = 1): number {
+        return this.cpu_price_per_us(sample, ms * 1000)
+    }
+
+    cpu_price_per_us(sample: SampleUsage, us = 1000): number {
+        return this.price_per(sample, us, sample.cpu)
+    }
+
+    net_price_per_kb(sample: SampleUsage, kilobytes = 1): number {
+        return this.net_price_per_kb(sample, kilobytes * 1000)
+    }
+
+    net_price_per_byte(sample: SampleUsage, bytes = 1000): number {
+        return this.price_per(sample, bytes, sample.net)
+    }
+
+    price_per(sample: SampleUsage, unit = 1000, usage: UInt128 = sample.cpu): number {
         // Sample token units
         const tokens = Asset.fromUnits(10000, this.symbol)
 
@@ -47,7 +63,7 @@ export class REXState extends Struct {
         const bancor = Number(tokens.units) / (this.total_rent.value / this.total_unlent.value)
 
         // The ratio of the number of tokens received vs the sampled values
-        const unitPrice = bancor * (Number(sample.cpu) / BNPrecision)
+        const unitPrice = bancor * (Number(usage) / BNPrecision)
 
         // The token units spent per unit
         const perunit = Number(tokens.units) / unitPrice
