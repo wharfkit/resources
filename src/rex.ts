@@ -48,7 +48,7 @@ export class REXState extends Struct {
     }
 
     net_price_per_kb(sample: SampleUsage, kilobytes = 1): number {
-        return this.net_price_per_kb(sample, kilobytes * 1000)
+        return this.net_price_per_byte(sample, kilobytes * 1000)
     }
 
     net_price_per_byte(sample: SampleUsage, bytes = 1000): number {
