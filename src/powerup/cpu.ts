@@ -39,7 +39,7 @@ export class PowerUpStateResourceCPU extends PowerUpStateResource {
         return Math.floor((us / Number(sampled.getValue())) * BNPrecision)
     }
     us_to_weight(sample: UInt128, us: Int64Type): Int64 {
-        return Int64.from(us).multiplying(BNPrecision).dividing(Int64.from(sample), 'floor')
+        return Int64.from(us).multiplying(BNPrecision).dividing(sample, 'floor')
     }
 
     // Default frac generation by smallest unit type
