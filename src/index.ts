@@ -1,9 +1,10 @@
-import {API, APIClient, APIClientOptions, FetchProvider, UInt128} from '@wharfkit/antelope'
+import {API, APIClient, APIClientOptions, FetchProvider, Int, UInt128} from '@wharfkit/antelope'
 import BN from 'bn.js'
 
 import {PowerUpAPI} from './powerup'
 import {RAMAPI} from './ram'
 import {REXAPI} from './rex'
+import bigDecimal from 'js-big-decimal'
 
 export * from './powerup'
 export * from './ram'
@@ -84,4 +85,8 @@ function divCeil(num: BN, den: BN): UInt128 {
         v = v.sub(one)
     }
     return UInt128.from(v)
+}
+
+export function intToBigDecimal(value: Int | number) {
+    return new bigDecimal(String(value))
 }

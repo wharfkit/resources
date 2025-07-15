@@ -1,0 +1,96 @@
+{
+    "request": {
+        "path": "https://eos.greymass.com/v1/chain/get_account",
+        "params": {
+            "method": "POST",
+            "body": "{\"account_name\":\"eosio.reserv\"}",
+            "headers": {}
+        }
+    },
+    "status": 200,
+    "json": {
+        "account_name": "eosio.reserv",
+        "head_block_num": 446530512,
+        "head_block_time": "2025-07-14T20:56:17.000",
+        "privileged": false,
+        "last_code_update": "1970-01-01T00:00:00.000",
+        "created": "2021-02-07T15:45:07.500",
+        "ram_quota": 9587,
+        "net_weight": "95356278485774",
+        "cpu_weight": "362246729107787",
+        "net_limit": {
+            "used": 0,
+            "available": "180562783078374",
+            "max": "180562783078374",
+            "last_usage_update_time": "2021-02-07T15:45:07.500",
+            "current_used": 0
+        },
+        "cpu_limit": {
+            "used": 0,
+            "available": "32728221285",
+            "max": "32728221285",
+            "last_usage_update_time": "2021-02-07T15:45:07.500",
+            "current_used": 0
+        },
+        "ram_usage": 3212,
+        "permissions": [
+            {
+                "perm_name": "active",
+                "parent": "owner",
+                "required_auth": {
+                    "threshold": 1,
+                    "keys": [],
+                    "accounts": [
+                        {
+                            "permission": {
+                                "actor": "eosio",
+                                "permission": "active"
+                            },
+                            "weight": 1
+                        }
+                    ],
+                    "waits": []
+                },
+                "linked_actions": []
+            },
+            {
+                "perm_name": "owner",
+                "parent": "",
+                "required_auth": {
+                    "threshold": 1,
+                    "keys": [],
+                    "accounts": [
+                        {
+                            "permission": {
+                                "actor": "eosio",
+                                "permission": "active"
+                            },
+                            "weight": 1
+                        }
+                    ],
+                    "waits": []
+                },
+                "linked_actions": []
+            }
+        ],
+        "total_resources": {
+            "owner": "eosio.reserv",
+            "net_weight": "9535627848.5774 EOS",
+            "cpu_weight": "36224672910.7787 EOS",
+            "ram_bytes": 8187
+        },
+        "self_delegated_bandwidth": null,
+        "refund_request": null,
+        "voter_info": null,
+        "rex_info": null,
+        "subjective_cpu_bill_limit": {
+            "used": 0,
+            "available": 0,
+            "max": 0,
+            "last_usage_update_time": "2000-01-01T00:00:00.000",
+            "current_used": 0
+        },
+        "eosio_any_linked_actions": []
+    },
+    "text": "{\"account_name\":\"eosio.reserv\",\"head_block_num\":446530512,\"head_block_time\":\"2025-07-14T20:56:17.000\",\"privileged\":false,\"last_code_update\":\"1970-01-01T00:00:00.000\",\"created\":\"2021-02-07T15:45:07.500\",\"ram_quota\":9587,\"net_weight\":\"95356278485774\",\"cpu_weight\":\"362246729107787\",\"net_limit\":{\"used\":0,\"available\":\"180562783078374\",\"max\":\"180562783078374\",\"last_usage_update_time\":\"2021-02-07T15:45:07.500\",\"current_used\":0},\"cpu_limit\":{\"used\":0,\"available\":\"32728221285\",\"max\":\"32728221285\",\"last_usage_update_time\":\"2021-02-07T15:45:07.500\",\"current_used\":0},\"ram_usage\":3212,\"permissions\":[{\"perm_name\":\"active\",\"parent\":\"owner\",\"required_auth\":{\"threshold\":1,\"keys\":[],\"accounts\":[{\"permission\":{\"actor\":\"eosio\",\"permission\":\"active\"},\"weight\":1}],\"waits\":[]},\"linked_actions\":[]},{\"perm_name\":\"owner\",\"parent\":\"\",\"required_auth\":{\"threshold\":1,\"keys\":[],\"accounts\":[{\"permission\":{\"actor\":\"eosio\",\"permission\":\"active\"},\"weight\":1}],\"waits\":[]},\"linked_actions\":[]}],\"total_resources\":{\"owner\":\"eosio.reserv\",\"net_weight\":\"9535627848.5774 EOS\",\"cpu_weight\":\"36224672910.7787 EOS\",\"ram_bytes\":8187},\"self_delegated_bandwidth\":null,\"refund_request\":null,\"voter_info\":null,\"rex_info\":null,\"subjective_cpu_bill_limit\":{\"used\":0,\"available\":0,\"max\":0,\"last_usage_update_time\":\"2000-01-01T00:00:00.000\",\"current_used\":0},\"eosio_any_linked_actions\":[]}"
+}

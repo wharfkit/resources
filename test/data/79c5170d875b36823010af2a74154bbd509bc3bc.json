@@ -3,7 +3,8 @@
         "path": "https://eos.greymass.com/v1/chain/get_table_rows",
         "params": {
             "method": "POST",
-            "body": "{\"code\":\"eosio\",\"scope\":\"\",\"table\":\"powup.state\",\"key_type\":\"name\",\"json\":false}"
+            "body": "{\"code\":\"eosio\",\"scope\":\"\",\"table\":\"powup.state\",\"key_type\":\"name\",\"json\":false}",
+            "headers": {}
         }
     },
     "status": 200,

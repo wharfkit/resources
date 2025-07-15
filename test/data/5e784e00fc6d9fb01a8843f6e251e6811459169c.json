@@ -3,7 +3,8 @@
         "path": "https://eos.greymass.com/v1/chain/get_account",
         "params": {
             "method": "POST",
-            "body": "{\"account_name\":\"b1\"}"
+            "body": "{\"account_name\":\"b1\"}",
+            "headers": {}
         }
     },
     "status": 200,
