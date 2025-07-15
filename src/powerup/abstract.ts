@@ -10,7 +10,6 @@ import {
     UInt8,
 } from '@wharfkit/antelope'
 import BN from 'bn.js'
-import bigDecimal from 'js-big-decimal'
 
 import {intToBigDecimal} from '..'
 import {PowerUpStateOptions} from './options'
@@ -154,8 +153,8 @@ export abstract class PowerUpStateResource extends Struct {
                 adjusted_utilization.subtracting(start_utilization)
             )
             fee += Number(
-                new bigDecimal(this.price_function_legacy(adjusted_utilization) * min)
-                    .divide(new bigDecimal(weight.toString()))
+                intToBigDecimal(this.price_function_legacy(adjusted_utilization) * min)
+                    .divide(intToBigDecimal(weight))
                     .getValue()
             )
             start_utilization = adjusted_utilization
