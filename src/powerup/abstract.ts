@@ -160,7 +160,7 @@ export abstract class PowerUpStateResource extends Struct {
             )
             start_utilization = adjusted_utilization
         }
-        if (start_utilization.gt(end_utilization)) {
+        if (start_utilization.lt(end_utilization)) {
             fee += this.price_integral_delta(start_utilization, end_utilization)
         }
         return fee
