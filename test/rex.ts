@@ -16,19 +16,17 @@ suite('[eos] rex calculations', function () {
     })
     test('rex.reserved', async function () {
         const rex = await resources.v1.rex.get_state()
-        assert.equal(rex.reserved, 0.04960045779382111)
-        // 04.960045779382111% represented as float
+        assert.equal(rex.reserved, 0.007264384002969463)
     })
     test('rex.value', async function () {
         const rex = await resources.v1.rex.get_state()
-        assert.equal(rex.value, 0.00010160262316038182)
-        // 0.00010160262316038182 EOS/REX
+        assert.equal(rex.value, 0.000132897336944197)
     })
     test('rex.exchange', async function () {
         const rex = await resources.v1.rex.get_state()
         const amount = Asset.from('493874015.6505 REX')
         const tokens = rex.exchange(amount)
-        assert.equal(tokens.value, 50178.8955)
+        assert.equal(tokens.value, 65634.5414)
     })
     test('rex.price_per(1000)', async function () {
         const rex = await resources.v1.rex.get_state()
@@ -36,9 +34,9 @@ suite('[eos] rex calculations', function () {
         const price = rex.price_per(usage, 1000)
 
         const asset = Asset.from(price, '4,EOS')
-        assert.equal(String(asset), '0.0662 EOS')
-        assert.equal(asset.value, 0.0662)
-        assert.equal(Number(asset.units), 662)
+        assert.equal(String(asset), '0.0129 EOS')
+        assert.equal(asset.value, 0.0129)
+        assert.equal(Number(asset.units), 129)
     })
     test('rex.price_per(10000)', async function () {
         const rex = await resources.v1.rex.get_state()
@@ -46,9 +44,9 @@ suite('[eos] rex calculations', function () {
         const price = rex.price_per(usage, 10000)
 
         const asset = Asset.from(price, '4,EOS')
-        assert.equal(String(asset), '0.6624 EOS')
-        assert.equal(asset.value, 0.6624)
-        assert.equal(Number(asset.units), 6624)
+        assert.equal(String(asset), '0.1289 EOS')
+        assert.equal(asset.value, 0.1289)
+        assert.equal(Number(asset.units), 1289)
     })
     test('rex.price_per(1000000)', async function () {
         const rex = await resources.v1.rex.get_state()
@@ -56,8 +54,8 @@ suite('[eos] rex calculations', function () {
         const price = rex.price_per(usage, 1000000)
 
         const asset = Asset.from(price, '4,EOS')
-        assert.equal(String(asset), '66.2386 EOS')
-        assert.equal(asset.value, 66.2386)
-        assert.equal(Number(asset.units), 662386)
+        assert.equal(String(asset), '12.8880 EOS')
+        assert.equal(asset.value, 12.888)
+        assert.equal(Number(asset.units), 128880)
     })
 })

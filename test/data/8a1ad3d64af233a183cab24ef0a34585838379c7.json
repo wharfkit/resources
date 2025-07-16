@@ -1,0 +1,148 @@
+{
+    "request": {
+        "path": "https://eos.greymass.com/v1/chain/get_account",
+        "params": {
+            "method": "POST",
+            "body": "{\"account_name\":\"greymassfuel\"}",
+            "headers": {}
+        }
+    },
+    "status": 200,
+    "json": {
+        "account_name": "greymassfuel",
+        "head_block_num": 446867848,
+        "head_block_time": "2025-07-16T19:49:05.000",
+        "privileged": false,
+        "last_code_update": "1970-01-01T00:00:00.000",
+        "created": "2019-11-01T22:31:13.500",
+        "core_liquid_balance": "544.7766 EOS",
+        "ram_quota": 9229,
+        "net_weight": 5281058,
+        "cpu_weight": "8302889400",
+        "net_limit": {
+            "used": 247869,
+            "available": 9752132,
+            "max": 10000001,
+            "last_usage_update_time": "2025-07-16T19:47:02.000",
+            "current_used": 247516
+        },
+        "cpu_limit": {
+            "used": 579523,
+            "available": 170626,
+            "max": 750149,
+            "last_usage_update_time": "2025-07-16T19:47:02.000",
+            "current_used": 578698
+        },
+        "ram_usage": 4547,
+        "permissions": [
+            {
+                "perm_name": "active",
+                "parent": "owner",
+                "required_auth": {
+                    "threshold": 1,
+                    "keys": [
+                        {
+                            "key": "EOS8VE4hVEP4pNdFUwPf2u8inCscVeFGMf1MUt1ec8tfKHaiTJGQk",
+                            "weight": 1
+                        }
+                    ],
+                    "accounts": [],
+                    "waits": []
+                },
+                "linked_actions": []
+            },
+            {
+                "perm_name": "buyram",
+                "parent": "active",
+                "required_auth": {
+                    "threshold": 1,
+                    "keys": [
+                        {
+                            "key": "EOS82EHUh2YMR51Hu6JRJWpQUhWQA3KarnePHuyi29AF9iJmoe6nK",
+                            "weight": 1
+                        }
+                    ],
+                    "accounts": [],
+                    "waits": []
+                },
+                "linked_actions": [
+                    {
+                        "account": "eosio",
+                        "action": "buyrambytes"
+                    },
+                    {
+                        "account": "eosio",
+                        "action": "buyram"
+                    }
+                ]
+            },
+            {
+                "perm_name": "cosign",
+                "parent": "active",
+                "required_auth": {
+                    "threshold": 1,
+                    "keys": [
+                        {
+                            "key": "EOS8Ym3MwFnAgPgDZUB9J9FwW3SrMNhr3JDv9qZA3R7nUC7DnBvm4",
+                            "weight": 1
+                        }
+                    ],
+                    "accounts": [],
+                    "waits": []
+                },
+                "linked_actions": [
+                    {
+                        "account": "greymassnoop",
+                        "action": "noop"
+                    }
+                ]
+            },
+            {
+                "perm_name": "owner",
+                "parent": "",
+                "required_auth": {
+                    "threshold": 1,
+                    "keys": [
+                        {
+                            "key": "EOS6sLkWkqLZKPWEKpRqWU8oS8Tu7Ebjv4B8L82ViDb6r9fgZVYDx",
+                            "weight": 1
+                        }
+                    ],
+                    "accounts": [],
+                    "waits": []
+                },
+                "linked_actions": []
+            }
+        ],
+        "total_resources": {
+            "owner": "greymassfuel",
+            "net_weight": "528.1058 EOS",
+            "cpu_weight": "830288.9400 EOS",
+            "ram_bytes": 7829
+        },
+        "self_delegated_bandwidth": null,
+        "refund_request": null,
+        "voter_info": {
+            "owner": "greymassfuel",
+            "proxy": "",
+            "producers": [],
+            "staked": 0,
+            "last_vote_weight": "0.00000000000000000",
+            "proxied_vote_weight": "0.00000000000000000",
+            "is_proxy": 0,
+            "flags1": 0,
+            "reserved2": 0,
+            "reserved3": "0 "
+        },
+        "rex_info": null,
+        "subjective_cpu_bill_limit": {
+            "used": 0,
+            "available": 0,
+            "max": 0,
+            "last_usage_update_time": "2000-01-01T00:00:00.000",
+            "current_used": 0
+        },
+        "eosio_any_linked_actions": []
+    },
+    "text": "{\"account_name\":\"greymassfuel\",\"head_block_num\":446867848,\"head_block_time\":\"2025-07-16T19:49:05.000\",\"privileged\":false,\"last_code_update\":\"1970-01-01T00:00:00.000\",\"created\":\"2019-11-01T22:31:13.500\",\"core_liquid_balance\":\"544.7766 EOS\",\"ram_quota\":9229,\"net_weight\":5281058,\"cpu_weight\":\"8302889400\",\"net_limit\":{\"used\":247869,\"available\":9752132,\"max\":10000001,\"last_usage_update_time\":\"2025-07-16T19:47:02.000\",\"current_used\":247516},\"cpu_limit\":{\"used\":579523,\"available\":170626,\"max\":750149,\"last_usage_update_time\":\"2025-07-16T19:47:02.000\",\"current_used\":578698},\"ram_usage\":4547,\"permissions\":[{\"perm_name\":\"active\",\"parent\":\"owner\",\"required_auth\":{\"threshold\":1,\"keys\":[{\"key\":\"EOS8VE4hVEP4pNdFUwPf2u8inCscVeFGMf1MUt1ec8tfKHaiTJGQk\",\"weight\":1}],\"accounts\":[],\"waits\":[]},\"linked_actions\":[]},{\"perm_name\":\"buyram\",\"parent\":\"active\",\"required_auth\":{\"threshold\":1,\"keys\":[{\"key\":\"EOS82EHUh2YMR51Hu6JRJWpQUhWQA3KarnePHuyi29AF9iJmoe6nK\",\"weight\":1}],\"accounts\":[],\"waits\":[]},\"linked_actions\":[{\"account\":\"eosio\",\"action\":\"buyrambytes\"},{\"account\":\"eosio\",\"action\":\"buyram\"}]},{\"perm_name\":\"cosign\",\"parent\":\"active\",\"required_auth\":{\"threshold\":1,\"keys\":[{\"key\":\"EOS8Ym3MwFnAgPgDZUB9J9FwW3SrMNhr3JDv9qZA3R7nUC7DnBvm4\",\"weight\":1}],\"accounts\":[],\"waits\":[]},\"linked_actions\":[{\"account\":\"greymassnoop\",\"action\":\"noop\"}]},{\"perm_name\":\"owner\",\"parent\":\"\",\"required_auth\":{\"threshold\":1,\"keys\":[{\"key\":\"EOS6sLkWkqLZKPWEKpRqWU8oS8Tu7Ebjv4B8L82ViDb6r9fgZVYDx\",\"weight\":1}],\"accounts\":[],\"waits\":[]},\"linked_actions\":[]}],\"total_resources\":{\"owner\":\"greymassfuel\",\"net_weight\":\"528.1058 EOS\",\"cpu_weight\":\"830288.9400 EOS\",\"ram_bytes\":7829},\"self_delegated_bandwidth\":null,\"refund_request\":null,\"voter_info\":{\"owner\":\"greymassfuel\",\"proxy\":\"\",\"producers\":[],\"staked\":0,\"last_vote_weight\":\"0.00000000000000000\",\"proxied_vote_weight\":\"0.00000000000000000\",\"is_proxy\":0,\"flags1\":0,\"reserved2\":0,\"reserved3\":\"0 \"},\"rex_info\":null,\"subjective_cpu_bill_limit\":{\"used\":0,\"available\":0,\"max\":0,\"last_usage_update_time\":\"2000-01-01T00:00:00.000\",\"current_used\":0},\"eosio_any_linked_actions\":[]}"
+}

@@ -1,0 +1,33 @@
+{
+    "request": {
+        "path": "https://wax.greymass.com/v1/chain/get_info",
+        "params": {
+            "method": "GET",
+            "headers": {}
+        }
+    },
+    "status": 200,
+    "json": {
+        "server_version": "b18375f7",
+        "chain_id": "1064487b3cd1a897ce03ae5b6a865651747e2e152090f99c1d19d44e01aea5a4",
+        "head_block_num": 382431929,
+        "last_irreversible_block_num": 382431604,
+        "last_irreversible_block_id": "16cb71744c10bcbb15db4c6bd31de2bc8b636202573377a7133af48fbb7d4d81",
+        "head_block_id": "16cb72b9bf09a6ed082aa91d31d3eff20e56b6905b888f023dea997153a085ca",
+        "head_block_time": "2025-07-16T19:49:06.000",
+        "head_block_producer": "wombatblockx",
+        "virtual_block_cpu_limit": 200000,
+        "virtual_block_net_limit": 1048576000,
+        "block_cpu_limit": 200000,
+        "block_net_limit": 1048576,
+        "server_version_string": "v5.0.3wax01",
+        "fork_db_head_block_num": 382431929,
+        "fork_db_head_block_id": "16cb72b9bf09a6ed082aa91d31d3eff20e56b6905b888f023dea997153a085ca",
+        "server_full_version_string": "v5.0.3wax01-b18375f72cde5e3dbc31bcff1d4f546065975d1a",
+        "total_cpu_weight": "133720003227304002",
+        "total_net_weight": "386677926721957765",
+        "earliest_available_block_num": 382258379,
+        "last_irreversible_block_time": "2025-07-16T19:46:23.500"
+    },
+    "text": "{\"server_version\":\"b18375f7\",\"chain_id\":\"1064487b3cd1a897ce03ae5b6a865651747e2e152090f99c1d19d44e01aea5a4\",\"head_block_num\":382431929,\"last_irreversible_block_num\":382431604,\"last_irreversible_block_id\":\"16cb71744c10bcbb15db4c6bd31de2bc8b636202573377a7133af48fbb7d4d81\",\"head_block_id\":\"16cb72b9bf09a6ed082aa91d31d3eff20e56b6905b888f023dea997153a085ca\",\"head_block_time\":\"2025-07-16T19:49:06.000\",\"head_block_producer\":\"wombatblockx\",\"virtual_block_cpu_limit\":200000,\"virtual_block_net_limit\":1048576000,\"block_cpu_limit\":200000,\"block_net_limit\":1048576,\"server_version_string\":\"v5.0.3wax01\",\"fork_db_head_block_num\":382431929,\"fork_db_head_block_id\":\"16cb72b9bf09a6ed082aa91d31d3eff20e56b6905b888f023dea997153a085ca\",\"server_full_version_string\":\"v5.0.3wax01-b18375f72cde5e3dbc31bcff1d4f546065975d1a\",\"total_cpu_weight\":\"133720003227304002\",\"total_net_weight\":\"386677926721957765\",\"earliest_available_block_num\":382258379,\"last_irreversible_block_time\":\"2025-07-16T19:46:23.500\"}"
+}
