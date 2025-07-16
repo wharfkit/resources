@@ -9,7 +9,6 @@ import {
     UInt64,
     UInt8,
 } from '@wharfkit/antelope'
-import BN from 'bn.js'
 
 import {intToBigDecimal} from '..'
 import {PowerUpStateOptions} from './options'
@@ -37,19 +36,11 @@ export abstract class PowerUpStateResource extends Struct {
     abstract per_day(options?: PowerUpStateOptions): number
 
     // Get the current number of allocated units (shift from REX -> PowerUp)
-    public get allocated_legacy() {
-        return 1 - Number(this.weight_ratio) / Number(this.target_weight_ratio) / 100
-    }
-
     public get allocated(): number {
         return 1 - Number(this.weight_ratio.dividing(this.target_weight_ratio)) / 100
     }
 
     // Get the current percentage of reserved units
-    public get reserved_legacy() {
-        return new BN(String(this.utilization)) / new BN(String(this.weight))
-    }
-
     public get reserved(): Int64 {
         return this.utilization.dividing(this.weight)
     }
@@ -60,14 +51,6 @@ export abstract class PowerUpStateResource extends Struct {
     }
 
     // Mimic: https://github.com/EOSIO/eosio.contracts/blob/d7bc0a5cc8c0c2edd4dc61b0126517d0cb46fd94/contracts/eosio.system/src/powerup.cpp#L358
-    utilization_increase_legacy(frac) {
-        const {weight} = this
-        const frac128 = UInt128.from(frac)
-        const utilization_increase =
-            new BN(weight.value.mul(new BN(frac128.value))) / Math.pow(10, 15)
-        return Math.ceil(utilization_increase)
-    }
-
     utilization_increase(frac: UInt128) {
         const base = intToBigDecimal(frac)
         const weight = intToBigDecimal(this.weight)
@@ -76,22 +59,6 @@ export abstract class PowerUpStateResource extends Struct {
     }
 
     // Mimic: https://github.com/EOSIO/eosio.contracts/blob/d7bc0a5cc8c0c2edd4dc61b0126517d0cb46fd94/contracts/eosio.system/src/powerup.cpp#L284-L298
-    price_function_legacy(utilization: Int64): number {
-        const {exponent, weight} = this
-        const max_price: number = this.max_price.value
-        const min_price: number = this.min_price.value
-        let price = min_price
-        const new_exponent = Number(exponent) - 1.0
-        if (new_exponent <= 0.0) {
-            return max_price
-        } else {
-            const util_weight = intToBigDecimal(utilization).divide(intToBigDecimal(weight), 18)
-            const difference = max_price - min_price
-            price += difference * Math.pow(Number(util_weight.getValue()), new_exponent)
-        }
-        return price
-    }
-
     price_function(utilization: Int64): number {
         const {weight} = this
         let price = this.min_price.value
@@ -108,21 +75,6 @@ export abstract class PowerUpStateResource extends Struct {
     }
 
     // Mimic: https://github.com/EOSIO/eosio.contracts/blob/d7bc0a5cc8c0c2edd4dc61b0126517d0cb46fd94/contracts/eosio.system/src/powerup.cpp#L274-L280
-    price_integral_delta_legacy(start_utilization: Int64, end_utilization: Int64): number {
-        const {exponent, weight} = this
-        const max_price: number = this.max_price.value
-        const min_price: number = this.min_price.value
-        const coefficient = (max_price - min_price) / exponent.value
-        const start_u = Number(start_utilization.dividing(weight))
-        const end_u = Number(end_utilization.dividing(weight))
-        const delta =
-            min_price * end_u -
-            min_price * start_u +
-            coefficient * Math.pow(end_u, exponent.value) -
-            coefficient * Math.pow(start_u, exponent.value)
-        return delta
-    }
-
     price_integral_delta(start_utilization: Int64, end_utilization: Int64): number {
         const difference = Asset.fromUnits(
             this.max_price.units.subtracting(this.min_price.units),
@@ -140,31 +92,6 @@ export abstract class PowerUpStateResource extends Struct {
     }
 
     // Mimic: https://github.com/EOSIO/eosio.contracts/blob/d7bc0a5cc8c0c2edd4dc61b0126517d0cb46fd94/contracts/eosio.system/src/powerup.cpp#L262-L315
-    fee_legacy(utilization_increase, adjusted_utilization) {
-        const {utilization, weight} = this
-
-        let start_utilization = Int64.from(utilization)
-        const end_utilization = start_utilization.adding(utilization_increase)
-
-        let fee = 0
-        if (start_utilization.lt(adjusted_utilization)) {
-            const min = Math.min(
-                utilization_increase,
-                adjusted_utilization.subtracting(start_utilization)
-            )
-            fee += Number(
-                intToBigDecimal(this.price_function_legacy(adjusted_utilization) * min)
-                    .divide(intToBigDecimal(weight))
-                    .getValue()
-            )
-            start_utilization = adjusted_utilization
-        }
-        if (start_utilization.lt(end_utilization)) {
-            fee += this.price_integral_delta(start_utilization, end_utilization)
-        }
-        return fee
-    }
-
     fee(utilization_increase: UInt128, adjusted_utilization: Int64) {
         const {utilization, weight} = this
 
