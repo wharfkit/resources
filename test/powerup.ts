@@ -81,13 +81,6 @@ suite('[eos] powerup - cpu calculations', function () {
         const price = powerup.cpu.price_per_ms(sample, 60, this.testFixture)
         assert.equal(price, 0.012)
     })
-    test('powerup.cpu.price_per_us(1)', async function () {
-        const powerup = await resources_eos.v1.powerup.get_state()
-        const sample = await resources_eos.getSampledUsage()
-
-        const price = powerup.cpu.price_per_us(sample, 1, this.testFixture)
-        assert.equal(price, 0.0001)
-    })
     test('powerup.cpu.price_per_us(1000)', async function () {
         const powerup = await resources_eos.v1.powerup.get_state()
         const sample = await resources_eos.getSampledUsage()

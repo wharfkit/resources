@@ -1,4 +1,4 @@
-import {Int64, Int64Type, Struct, UInt128, UInt128Type} from '@wharfkit/antelope'
+import {Asset, Int64, Int64Type, Struct, UInt128, UInt128Type} from '@wharfkit/antelope'
 
 import {BNPrecision, intToBigDecimal, SampleUsage} from '..'
 import {PowerUpStateResource} from './abstract'
@@ -70,7 +70,25 @@ export class PowerUpStateResourceCPU extends PowerUpStateResource {
         const fee = this.fee(utilization_increase, adjusted_utilization)
         // Force the fee up to the next highest value of precision
         const precision = Math.pow(10, this.max_price.symbol.precision)
-        const value = Math.ceil(fee * precision) / precision
+        const price = fee * precision
+        const value = Math.ceil(price) / precision
+        const asset = Asset.fromFloat(fee, this.symbol)
+        if (price < 1) {
+            throw new Error(
+                `Price (${String(
+                    asset
+                )}) for requested CPU amount (${us}us) below required precision, increase requested amount.`
+            )
+        }
+        if (options && options.min_payment && options.min_payment.units.gt(asset.units)) {
+            throw new Error(
+                `Price (${String(
+                    asset
+                )}) for requested CPU amount (${us}us) below minimum required payment (${String(
+                    options.min_payment
+                )}), increase requested CPU amount.`
+            )
+        }
         // Return the modified fee
         return value
     }
