@@ -1,4 +1,4 @@
-import {BNPrecision, Resources, SampleUsage} from './'
+import {BNPrecision, intToBigDecimal, Resources, SampleUsage} from './'
 
 import {Asset, Struct, UInt128, UInt64, UInt8} from '@wharfkit/antelope'
 
@@ -26,17 +26,18 @@ export class REXState extends Struct {
     }
 
     public get value() {
-        return (
-            (Number(this.total_lent.units) + Number(this.total_unlent.units)) /
-            Number(this.total_rex.units)
-        )
+        const lent = intToBigDecimal(this.total_lent.units)
+        const unlent = intToBigDecimal(this.total_unlent.units)
+        const rex = intToBigDecimal(this.total_rex.units)
+        return Number(lent.add(unlent).divide(rex, 18).getValue())
     }
 
     exchange(amount: Asset): Asset {
-        return Asset.from(
-            (amount.value * this.total_lendable.value) / this.total_rex.value,
-            this.symbol
-        )
+        const value = intToBigDecimal(amount.units)
+        const lendable = intToBigDecimal(this.total_lendable.units)
+        const rex = intToBigDecimal(this.total_rex.units)
+        const tokens = value.multiply(lendable).divide(rex, this.precision)
+        return Asset.fromUnits(Number(tokens.getValue()), this.symbol)
     }
 
     cpu_price_per_ms(sample: SampleUsage, ms = 1): number {

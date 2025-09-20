@@ -1,9 +1,8 @@
-import {Struct, UInt128} from '@wharfkit/antelope'
+import {Int64, Int64Type, Struct, UInt128} from '@wharfkit/antelope'
 
-import {BNPrecision, SampleUsage} from '..'
+import {BNPrecision, intToBigDecimal, SampleUsage} from '..'
 import {PowerUpStateResource} from './abstract'
 import {PowerUpStateOptions} from './options'
-import BN from 'bn.js'
 
 @Struct.type('powerupstateresourcenet')
 export class PowerUpStateResourceNET extends PowerUpStateResource {
@@ -25,13 +24,15 @@ export class PowerUpStateResourceNET extends PowerUpStateResource {
     }
 
     // Convert weight to bytes
-    weight_to_bytes(sample: UInt128, weight: number): number {
-        return Math.ceil((weight * Number(sample)) / BNPrecision)
+    weight_to_bytes(sample: UInt128, weight: number): UInt128 {
+        return UInt128.from(
+            UInt128.from(weight).multiplying(Int64.from(sample)).dividing(BNPrecision, 'ceil')
+        )
     }
 
     // Convert bytes to weight
-    bytes_to_weight(sample: UInt128, bytes: number): number {
-        return Math.floor((bytes / Number(sample)) * BNPrecision)
+    bytes_to_weight(sample: UInt128, bytes: Int64Type): Int64 {
+        return Int64.from(bytes).multiplying(BNPrecision).dividing(Int64.from(sample), 'floor')
     }
 
     // Default frac generation by smallest unit type
@@ -42,10 +43,13 @@ export class PowerUpStateResourceNET extends PowerUpStateResource {
         this.frac_by_bytes(usage, kilobytes * 1000)
 
     // Frac generation by bytes
-    frac_by_bytes(usage: SampleUsage, bytes: number) {
-        const {weight} = this.cast()
-        const frac = new BN(this.bytes_to_weight(usage.net, bytes)) / weight
-        return Math.floor(frac * Math.pow(10, 15))
+    frac_by_bytes(usage: SampleUsage, bytes: Int64Type): Int64 {
+        const precision = 15
+        const converted = intToBigDecimal(this.bytes_to_weight(usage.net, bytes))
+        const current = intToBigDecimal(this.weight)
+        const multiplier = intToBigDecimal(Math.pow(10, precision))
+        const frac = converted.divide(current, precision).multiply(multiplier)
+        return Int64.from(frac.getValue())
     }
 
     // Price generation by smallest units, bytes
@@ -60,7 +64,7 @@ export class PowerUpStateResourceNET extends PowerUpStateResource {
     price_per_byte(usage: SampleUsage, bytes = 1000, options?: PowerUpStateOptions): number {
         // Determine the utilization increase by this action
         const frac = UInt128.from(this.frac(usage, bytes))
-        const utilization_increase = this.utilization_increase(usage.net, frac)
+        const utilization_increase = this.utilization_increase(frac)
 
         // Determine the adjusted utilization if needed
         const adjusted_utilization = this.determine_adjusted_utilization(options)
